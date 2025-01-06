@@ -3,7 +3,14 @@ module.exports = {
     "./src/**/*.{ts,tsx}", // Adjust paths to match your files
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        primary:"#020742",
+        lightPrimary:"#0e1457",
+        lightcancelBtn:"#99a38b",
+        cancelBtn:"#abb898"
+      }
+    },
   },
   plugins: [],
 }
