@@ -3,13 +3,14 @@ import Navigation from '../components/Navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../types/types';
 import SignUpLoginForm from '../components/SignUpLoginForm';
-
 const Home:React.FC = () => {
-  const IsLogin = useSelector((state:RootState) => state.users.isLoggedIn);
+  const userForm = useSelector((state:RootState) => state.users.userForm);
   return (
     <div>
         <Navigation />
-       {IsLogin && <SignUpLoginForm />}
+       {userForm && <SignUpLoginForm />}
+
+
        
     </div>
   )

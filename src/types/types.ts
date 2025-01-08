@@ -5,7 +5,9 @@ export interface User {
 
 export interface UsersState {
     user: User;
+    userForm:boolean;
     isLoggedIn: boolean;
+    isRegisterd:boolean;
 }
 
 
@@ -26,7 +28,9 @@ export interface RootState {
     },
     users:{
         user: User;
+        userForm:boolean;
         isLoggedIn: boolean;
+        isRegisterd:boolean;
     }
 }
 
