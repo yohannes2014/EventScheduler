@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Signup } from '../types/types';
+import { Signup, SignupValidator } from '../types/types';
 import { useDispatch } from 'react-redux';
 import { setUserForm } from '../features/users';
+import axios from 'axios';
 
 const SignUpForm = () => {
-  const [users, setUsers] = useState<Signup[]>([]);
+
   const [signUp, setSignUp] = useState<Signup>({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
+    date:'',
   });
-  const [errors, setErrors] = useState<Signup>({
+  const [errors, setErrors] = useState<SignupValidator>({
     name: '',
     email: '',
     password: '',
@@ -73,7 +75,7 @@ const SignUpForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const validationErrors: Signup = {
+    const validationErrors:SignupValidator = {
       name: signUp.name ? '' : 'Name cannot be empty',
       email: signUp.email ? '' : 'Email cannot be empty',
       password: signUp.password ? '' : 'Password cannot be empty',
@@ -91,9 +93,12 @@ const SignUpForm = () => {
         email: signUp.email,
         password: signUp.password,
         confirmPassword: signUp.confirmPassword,
+        date: new Date().toISOString(),
       };
-      setUsers((prevUsers) => [...prevUsers, newUser]);
-      console.log(users);
+
+      axios.post("http://localhost:8000/users/signup", newUser)
+      .then(result =>console.log(result.data))
+      .catch(err=> console.log(err))
     }
   };
 

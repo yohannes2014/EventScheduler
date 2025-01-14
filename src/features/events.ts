@@ -5,7 +5,9 @@ import { EventsState } from "../types/types";
 
 const initialState:EventsState = {
       events: [],  
-      isEvent:false
+      isEvent:false,
+      newEvent:false,
+      
 }
 
 const eventsSlice = createSlice({

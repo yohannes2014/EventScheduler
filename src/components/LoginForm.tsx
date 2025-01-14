@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Login } from '../types/types';
 import { setUserForm } from '../features/users';
+import axios from 'axios';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -58,12 +59,15 @@ const LoginForm = () => {
 
     // If no errors, proceed to login
     if (!newErrors.email && !newErrors.password) {
-      // Here you can dispatch the login action, or log the user
-      console.log('Logging in with:', login);
-      // Example dispatch
-      // dispatch(loginAction(login));
+      
+      axios.post('http://localhost:8000/users/login', login)
+      .then(res => console.log(res.data))
+      .catch(err=>console.log(err))
+
+    
     }
   };
+
 
   // Cancel login form
   const cancel = () => {

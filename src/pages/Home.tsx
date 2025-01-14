@@ -1,19 +1,15 @@
 import React from 'react';
-import Navigation from '../components/Navigation';
-import { useSelector } from 'react-redux';
-import { RootState } from '../types/types';
-import SignUpLoginForm from '../components/SignUpLoginForm';
+
 const Home:React.FC = () => {
-  const userForm = useSelector((state:RootState) => state.users.userForm);
+ 
   return (
-    <div>
-        <Navigation />
-       {userForm && <SignUpLoginForm />}
-
-
-       
+    <div className=''>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis vel harum, aperiam maiores beatae minus illo corporis culpa aut odit incidunt quos. Veniam voluptatibus nisi blanditiis pariatur libero hic quasi accusamus! Eaque vel nesciunt accusantium optio explicabo obcaecati! Quasi magnam dolore laborum culpa voluptatem quas eos asperiores. Corrupti minima suscipit voluptates laboriosam illum doloremque molestias. Pariatur quaerat numquam qui voluptatibus, minus sequi commodi possimus nam, architecto consequuntur vero voluptate optio, iusto quibusdam? Ea repudiandae odio quos quae beatae pariatur. Consequatur, ducimus officia ratione harum mollitia pariatur distinctio saepe ex, aliquam minus nihil voluptatibus voluptate illum, iusto ipsum. Hic, nostrum sunt.
+   
+   
+   
     </div>
-  )
+  )  
 }
 
 export default Home

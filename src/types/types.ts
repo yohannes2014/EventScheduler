@@ -19,12 +19,14 @@ export interface Event {
 export interface EventsState {
     events: Event[];  
     isEvent: boolean;
+    newEvent:boolean;
 }
 
 export interface RootState {
     events:{
         events: Event[];  
         isEvent: boolean;
+        newEvent:boolean;
     },
     users:{
         user: User;
@@ -39,8 +41,21 @@ export interface Signup{
     email:string;
     password:string;
     confirmPassword:string;
+    date:string;
 }
+export interface SignupValidator{
+    name:string;
+    email:string;
+    password:string;
+    confirmPassword:string;
+}
+
+
 export interface Login{
     email:string;
     password:string;
+}
+
+export interface NewEvent{
+    repeate:string;
 }
