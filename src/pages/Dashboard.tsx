@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
 import DashboardHeader from '../components/DashboardHeader'
-import PrivetRaute from '../routes/PrivetRaute'
-import AddNewEvent from '../components/AddNewEvent'
+import PrivetRaute from '../routes/PrivetRaute';
+import NewEvent from '../components/NewEvent';
+import { useSelector } from 'react-redux';
+import { RootState } from '../types/types';
 
 const Dashboard = () => {
+  const newEvent = useSelector((state:RootState)=>state.events.newEvent);
 
 
 
@@ -11,7 +14,7 @@ const Dashboard = () => {
     <div className=''>
         <DashboardHeader  />
         <PrivetRaute />
-        <AddNewEvent />
+       {newEvent && <NewEvent />}
         
     </div>
   )

@@ -8,7 +8,9 @@ module.exports = {
         primary:"#020742",
         lightPrimary:"#0e1457",
         lightcancelBtn:"#99a38b",
-        cancelBtn:"#abb898"
+        cancelBtn:"#abb898",
+        submitBtn:"#272075"
+        
       }
     },
   },

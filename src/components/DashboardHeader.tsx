@@ -3,6 +3,8 @@ import { MdOutlineNoteAdd } from "react-icons/md";
 import { TbMenu3 } from "react-icons/tb";
 import { IoMdClose } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
+import { eventForm } from '../features/events';
+import { useDispatch } from 'react-redux';
 
 const DashboardHeader:React.FC = () => {
     const [menu, setMenu] = useState<boolean>(true);
@@ -10,7 +12,7 @@ const DashboardHeader:React.FC = () => {
 const dropdown = () =>{
     setMenu(!menu);
 }
-
+const dispatch = useDispatch()  
 
 
 
@@ -33,7 +35,7 @@ const dropdown = () =>{
         </div>
         <div className='flex gap-10 px-3'>
         <button className='bg-primary text-white px-5 py-1 hidden ' >Add New </button>
-        <MdOutlineNoteAdd className='text-[30px] cursor-pointer font-bold  text-primary' />
+        <MdOutlineNoteAdd onClick={()=>dispatch(eventForm(true))} className='text-[30px] cursor-pointer font-bold  text-primary' />
         <p className='font-bold text-primary text-sm '>10/01/2025</p>
 
         </div>

@@ -11,10 +11,7 @@ export interface UsersState {
 }
 
 
-export interface Event {
-    eventTitle: string;
-    eventDate: string;
-}
+
 
 export interface EventsState {
     events: Event[];  
@@ -36,6 +33,9 @@ export interface RootState {
     }
 }
 
+
+
+
 export interface Signup{
     name:string;
     email:string;
@@ -56,6 +56,12 @@ export interface Login{
     password:string;
 }
 
-export interface NewEvent{
-    repeate:string;
+
+
+
+export interface Event{
+    title:string;
+    discription:string;
+    time:string;
+    date:string;
 }

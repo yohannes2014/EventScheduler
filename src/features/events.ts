@@ -17,8 +17,11 @@ const eventsSlice = createSlice({
     loginUser(state){
        state.isEvent = true;
     },
+    eventForm(state, action){
+       state.newEvent = action.payload; 
+    }
     }
 });
 
 export default eventsSlice.reducer;
-export const { loginUser} = eventsSlice.actions
+export const { loginUser, eventForm} = eventsSlice.actions
