@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Event } from "../types/types";
 
 export const useDays = () => {
 const [mon, setMon] = useState<string>('');
@@ -21,4 +22,18 @@ const [satday, setSatday] = useState<boolean>(false);
 const [sunday, setSunday] = useState<boolean>(false);
 
 return {monday, setMonday, tueday, setTueday, wednesday, setWednesday, thuday, setThuday, friday, setFriday, satday, setSatday, sunday, setSunday }
+}
+export const useEvents = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+return {events, setEvents}
+
+}
+export const useSingle = () => {
+ const [single, setSingle] = useState<Event>({
+    title: '',
+    date: '',
+    time: '',
+    discription: '',
+  });
+ return {single, setSingle}
 }

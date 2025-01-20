@@ -1,6 +1,7 @@
 import React from 'react'
 
 const RecInterval = () => {
+    
   return (
     <div className='w-full px-10 py-5 '>
     <form className='shadow-md px-2 py-3 rounded-lg'>
@@ -18,17 +19,15 @@ const RecInterval = () => {
                    <input type='time' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
                </td>
            </tr>
-
-
            <tr>
                <td>
                <label>Repeat Every : </label>
                <div className='flex gap-4 items-center'>
                <input className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='number'  />
-               <select>
-                <option>Days</option>
-                <option>Weeks</option>
-                <option>Months</option>
+               <select className='h-[30px]'>
+                    <option>Days</option>
+                    <option>Weeks</option>
+                    <option>Months</option>
                </select>
               </div>
                </td>

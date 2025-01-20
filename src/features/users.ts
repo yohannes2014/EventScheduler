@@ -11,7 +11,8 @@ const initialState:UsersState = {
     user:user,
     isLoggedIn:false,
     isRegisterd:true,
-    userForm:false
+    userForm:false,
+    display:"calender",
 }
 
 const usersSlice = createSlice({
@@ -26,9 +27,12 @@ const usersSlice = createSlice({
     },
     setRegisterForm(state , action){
         state.isRegisterd = action.payload;
-    }
+    },
+    setDisplay(state , action){
+        state.display = action.payload;
+    },
     }
 });
 
 export default usersSlice.reducer;
-export const { setUserForm, setLoginUser, setRegisterForm} = usersSlice.actions
+export const { setUserForm, setLoginUser, setRegisterForm, setDisplay} = usersSlice.actions

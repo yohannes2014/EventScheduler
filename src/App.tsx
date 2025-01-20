@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from './types/types';
 import SignUpLoginForm from './components/SignUpLoginForm';
 import Navigation from './components/Navigation';
-import HomeRaute from './routes/HomeRaute';
+import HomeRaute from './routes/AllRoutes';
 
 const App:React.FC = () => {
   const userForm = useSelector((state:RootState) => state.users.userForm);

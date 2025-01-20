@@ -8,6 +8,7 @@ export interface UsersState {
     userForm:boolean;
     isLoggedIn: boolean;
     isRegisterd:boolean;
+    display:string;
 }
 
 
@@ -30,18 +31,23 @@ export interface RootState {
         userForm:boolean;
         isLoggedIn: boolean;
         isRegisterd:boolean;
+        display:string;
     }
 }
 
 
 
 
-export interface Signup{
+export interface UsersInfo{
     name:string;
     email:string;
     password:string;
-    confirmPassword:string;
     date:string;
+}
+export interface  Signup extends UsersInfo{
+  
+    confirmPassword:string;
+  
 }
 export interface SignupValidator{
     name:string;
@@ -65,3 +71,21 @@ export interface Event{
     time:string;
     date:string;
 }
+
+export interface Standard {
+    title:string;
+    discription:string;
+    time:string;
+    date:string;
+  
+}
+
+export interface Error{
+    message:string
+}
+
+
+
+export interface LoginResponse {
+    login: boolean;
+  }

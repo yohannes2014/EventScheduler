@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDays } from '../hooks/states';
+import { useDays } from '../hooks/useEvents';
 
 const SapcificWeek = () => {
     

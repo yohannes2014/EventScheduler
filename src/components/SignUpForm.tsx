@@ -1,24 +1,15 @@
-import React, { useState } from 'react';
-import { Signup, SignupValidator } from '../types/types';
+import React from 'react';
+import { SignupValidator, UsersInfo } from '../types/types';
 import { useDispatch } from 'react-redux';
 import { setUserForm } from '../features/users';
 import axios from 'axios';
+import { useSignup, useSignupError } from '../hooks/useUsers';
 
 const SignUpForm = () => {
 
-  const [signUp, setSignUp] = useState<Signup>({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    date:'',
-  });
-  const [errors, setErrors] = useState<SignupValidator>({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+ 
+  const {signUp, setSignUp} = useSignup();
+  const {errors, setErrors} = useSignupError();
 
   const dispatch = useDispatch();
 
@@ -88,11 +79,10 @@ const SignUpForm = () => {
     // Check if there are any errors
     const isValid = !Object.values(validationErrors).some((error) => error);
     if (isValid) {
-      const newUser: Signup = {
+      const newUser: UsersInfo = {
         name: signUp.name,
         email: signUp.email,
         password: signUp.password,
-        confirmPassword: signUp.confirmPassword,
         date: new Date().toISOString(),
       };
 

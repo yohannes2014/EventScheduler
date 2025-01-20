@@ -1,17 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { eventForm } from '../features/events';
-import { Event } from '../types/types';
+import { useEvents, useSingle } from '../hooks/useEvents';
 
 const SingleEvent: React.FC = () => {
   const dispatch = useDispatch();
-  const [single, setSingle] = useState<Event>({
-    title: '',
-    date: '',
-    time: '',
-    discription: '',
-  });
-  const [events, setEvents] = useState<Event[]>([]);
+  const {events, setEvents} = useEvents();
+  const {single, setSingle} = useSingle();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
