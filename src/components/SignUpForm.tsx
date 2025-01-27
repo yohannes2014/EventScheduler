@@ -1,9 +1,10 @@
 import React from 'react';
 import { SignupValidator, UsersInfo } from '../types/types';
 import { useDispatch } from 'react-redux';
-import { setUserForm } from '../features/users';
 import axios from 'axios';
 import { useSignup, useSignupError } from '../hooks/useUsers';
+import { signUpApi } from '../api/usersApi';
+import { setUserForm, setMessage, setForm } from '../features/users';
 
 const SignUpForm = () => {
 
@@ -13,16 +14,16 @@ const SignUpForm = () => {
 
   const dispatch = useDispatch();
 
-  const cancel = () => dispatch(setUserForm(false)); // Cancel signup
+ 
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSignUp((prev) => ({ ...prev, [name]: value }));
 
     if (value.length < 5) {
-      setErrors((prev) => ({ ...prev, name: 'Name must have at least five characters' }));
+      setErrors((prev) => ({ ...prev, username: 'Name must have at least five characters' }));
     } else {
-      setErrors((prev) => ({ ...prev, name: '' }));
+      setErrors((prev) => ({ ...prev, username: '' }));
     }
   };
 
@@ -67,7 +68,7 @@ const SignUpForm = () => {
     e.preventDefault();
 
     const validationErrors:SignupValidator = {
-      name: signUp.name ? '' : 'Name cannot be empty',
+      username: signUp.username ? '' : 'Name cannot be empty',
       email: signUp.email ? '' : 'Email cannot be empty',
       password: signUp.password ? '' : 'Password cannot be empty',
       confirmPassword:
@@ -80,17 +81,39 @@ const SignUpForm = () => {
     const isValid = !Object.values(validationErrors).some((error) => error);
     if (isValid) {
       const newUser: UsersInfo = {
-        name: signUp.name,
+        username: signUp.username,
         email: signUp.email,
         password: signUp.password,
         date: new Date().toISOString(),
       };
 
-      axios.post("http://localhost:8000/users/signup", newUser)
-      .then(result =>console.log(result.data))
+      axios.post(signUpApi, newUser)
+      .then(result =>{
+        dispatch(setMessage(String(result.data)));
+
+        setTimeout(() => {
+          dispatch(setMessage(''))
+        }, 1500);
+        if(result.data === 'Successfully registered'){
+          dispatch(setMessage(String(result.data)));
+          setTimeout(() => {
+            
+            dispatch(setForm('login'))
+            
+          }, 1000);
+       
+          
+        }
+      })
       .catch(err=> console.log(err))
     }
   };
+
+
+
+const  handleCancel = () =>{
+   dispatch(setUserForm(false))  
+}
 
   return (
     <form onSubmit={handleSubmit}>
@@ -101,12 +124,12 @@ const SignUpForm = () => {
         <input
           type="text"
           id="name"
-          name="name"
+          name="username"
           placeholder="Enter your name"
           onChange={handleName}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:lightPrimary"
         />
-        <p className="text-red-600">{errors.name}</p>
+        <p className="text-red-600">{errors.username}</p>
       </div>
       <div className="mb-4">
         <label htmlFor="email" className="block text-gray-600 text-sm font-medium mb-2">
@@ -158,8 +181,8 @@ const SignUpForm = () => {
           Sign up
         </button>
         <span
-          className="p-3 bg-lightcancelBtn rounded text-base font-bold text-white"
-          onClick={cancel}
+          className="p-3 bg-lightcancelBtn rounded text-base font-bold text-white cursor-pointer"
+          onClick={handleCancel}
         >
           Cancel
         </span>

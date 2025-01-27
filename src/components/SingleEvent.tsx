@@ -1,12 +1,16 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { eventForm } from '../features/events';
-import { useEvents, useSingle } from '../hooks/useEvents';
+import { useDispatch, useSelector } from 'react-redux';
+import {useSingleEvent} from '../hooks/useEvents';
+import { setNewEvent } from '../features/events';
+import { RootState } from '../types/types';
+import axios from 'axios';
 
 const SingleEvent: React.FC = () => {
-  const dispatch = useDispatch();
-  const {events, setEvents} = useEvents();
-  const {single, setSingle} = useSingle();
+  
+  const {events,setEvents, single, setSingle} = useSingleEvent(); 
+  const dispatch = useDispatch()
+  const id = useSelector((state:RootState)=> state.auth.user.user._id)
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -14,21 +18,36 @@ const SingleEvent: React.FC = () => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
+    const newEvent = {
+      title:single.title,
+      time: single.time,
+      discription: single.discription,
+      date: single.date,
+      id:id 
+    }
 
     // Add the new event to the events list
-    setEvents((prevEvents) => [...prevEvents, single]);
+    setEvents((prevEvents) => [...prevEvents, newEvent]);
 
+   axios.post("http://localhost:8000/users/events", newEvent)
+   .then(res=>console.log(res.data))
+   .catch(err=>console.log(err))
+
+
+ 
     // Reset form data
     setSingle({
       title: '',
       time: '',
       discription: '',
       date: '',
+      id:''
+      
     });
 
-    // Log to console to see the event data
-    console.log(events);
+   
   };
 
   return (
@@ -92,7 +111,7 @@ const SingleEvent: React.FC = () => {
                 </button>
                 <p
                   className="bg-cancelBtn text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
-                  onClick={() => dispatch(eventForm(false))}
+                  onClick={()=>dispatch(setNewEvent(false))}
                 >
                   Cancel
                 </p>
@@ -106,3 +125,4 @@ const SingleEvent: React.FC = () => {
 };
 
 export default SingleEvent;
+ 

@@ -3,29 +3,30 @@ import { MdOutlineNoteAdd } from "react-icons/md";
 import { TbMenu3 } from "react-icons/tb";
 import { IoMdClose } from "react-icons/io";
 import {  NavLink} from 'react-router-dom';
-import { eventForm } from '../features/events';
-import { useDispatch } from 'react-redux';
-import { setDisplay } from '../features/users';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../types/types';
+import { setNewEvent } from '../features/events';
 
 const DashboardHeader:React.FC = () => {
     const [menu, setMenu] = useState<boolean>(true);
     const [date, setDate] = useState<Date>(new Date());
-
-
-
-
+const userName = useSelector((state:RootState)=>state.auth.user.user.username)
 const dropdown = () =>{
     setMenu(!menu);
 }
-const dispatch = useDispatch()  
+const dispatch = useDispatch() 
+
+const handleForm = () => {
+  dispatch(setNewEvent(true))
+}
 
 const listDisplay = () => {
-  dispatch(setDisplay('list'))
+
   setMenu(!menu);
 }
 
 const calenderDisplay = () => {
-  dispatch(setDisplay('calender'))
+ 
   setMenu(!menu);
 }
 
@@ -33,7 +34,7 @@ const calenderDisplay = () => {
     <div className='w-full h-[70px] bg-slate-50 flex sticky justify-between items-center top-[80px]'>
         <div className='px-3'>
             <p className='font-bold  text-primary text-sm'>Dashboard</p>
-            <p className='text-primary text-sm' >Hello <span className='font-bold  text-primary'>Yohannes</span></p>
+            <p className='text-primary text-sm' >Hello <span className='font-bold  text-primary'>{userName}</span></p>
         </div>
         <div>
       {menu ?  (<TbMenu3 onClick={dropdown} className='text-[30px] cursor-pointer font-bold  text-primary' />):
@@ -45,8 +46,8 @@ const calenderDisplay = () => {
 
         </div>
         <div className='flex gap-10 px-3'>
-        <button className='bg-primary text-white px-5 py-1 hidden ' >Add New </button>
-        <MdOutlineNoteAdd onClick={()=>dispatch(eventForm(true))} className='text-[30px] cursor-pointer font-bold  text-primary' />
+        <button className='bg-primary text-white px-5 py-1 hidden  ' >Add New </button>
+        <MdOutlineNoteAdd onClick={handleForm}  className='text-[30px] cursor-pointer font-bold  text-primary' />
         <p className='font-bold text-primary text-sm '>{date.toDateString()}</p>
 
         </div>

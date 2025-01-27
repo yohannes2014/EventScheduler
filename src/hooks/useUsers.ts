@@ -4,7 +4,7 @@ import { Signup, SignupValidator } from "../types/types";
 
 export const useSignup = () => {
 const [signUp, setSignUp] = useState<Signup>({
-    name: '',
+    username:'',
     email: '',
     password: '',
     confirmPassword: '',
@@ -16,7 +16,7 @@ return { signUp, setSignUp}
 
 export const useSignupError = () => {
   const [errors, setErrors] = useState<SignupValidator>({
-    name: '',
+    username:'',
     email: '',
     password: '',
     confirmPassword: '',

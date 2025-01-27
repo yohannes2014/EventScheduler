@@ -1,28 +1,40 @@
 import { UsersState } from '../types/types';
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const user = {
-    userName: "",
-    email:""
-}
+
 
 
 const initialState:UsersState = {
-    user:user,
-    isLoggedIn:false,
-    isRegisterd:true,
-    userForm:false,
-    display:"calender",
+   
+    
+    logSignForm:false,
+    notification:true,
+    message:'',
+    Form:'login',
+    login:false,
+    
 }
 
 const usersSlice = createSlice({
     name:"users",
     initialState,
     reducers:{
-    setUserForm(state, action){
-       state.userForm = action.payload
+    setUserForm(state, action:PayloadAction<boolean>){
+       state.logSignForm = action.payload
     },    
-    setLoginUser(state, action){
+    setUserNote(state, action:PayloadAction<boolean>){
+       state.notification = action.payload
+    },    
+    setMessage(state, action:PayloadAction<string>){
+       state.message = action.payload
+    },    
+    setForm(state, action:PayloadAction<string>){
+       state.Form = action.payload
+    },    
+    setUserLogin(state, action:PayloadAction<boolean>){
+       state.login = action.payload
+    },    
+    /* setLoginUser(state, action){
        state.isLoggedIn = action.payload;
     },
     setRegisterForm(state , action){
@@ -30,9 +42,9 @@ const usersSlice = createSlice({
     },
     setDisplay(state , action){
         state.display = action.payload;
-    },
+    }, */
     }
 });
 
 export default usersSlice.reducer;
-export const { setUserForm, setLoginUser, setRegisterForm, setDisplay} = usersSlice.actions
+export const { setUserForm , setMessage, setForm, setUserNote, setUserLogin} = usersSlice.actions 

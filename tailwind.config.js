@@ -9,9 +9,15 @@ module.exports = {
         lightPrimary:"#0e1457",
         lightcancelBtn:"#99a38b",
         cancelBtn:"#abb898",
-        submitBtn:"#272075"
+        submitBtn:"#272075",
+        niceback:"rgba(205, 209, 234, 0.3)",
+        nicebackDark:"#e8e9ed"
         
-      }
+        
+      },
+      backdropBlur: {
+        myBlur: '4px', 
+      },
     },
   },
   plugins: [],

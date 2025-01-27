@@ -3,10 +3,10 @@ import { RootState, Standard } from "../types/types";
 import { useState } from "react";
 import axios from "axios";
 
-const DailyEvents = () => {
-
+const WeeklyEvents = () => {
+  const [repeat, setRepeat] = useState<string>('daily');
   const [range, setRange] = useState<number>(0);
-  const [rangeType, setRangeType] = useState<string>('days');
+  const [rangeType, setRangeType] = useState<string>('weeks');
   const id = useSelector((state: RootState) => state.auth.user.user._id);
 
   const [standard, setStandard] = useState<Standard>({
@@ -28,26 +28,12 @@ const DailyEvents = () => {
       const start = new Date(standard.date);
       let nextRepeat = new Date(start);
       const newEvent: Standard[] = [];
-      const week = range * 7;
-      const month = range * 30;
-      const year = range * 365;
+      const month = range * 4;
+      const year = range * 52;
 
 
-          if (rangeType === "days") {
-              for (let i = 1; i <= range; i++) {
-                  nextRepeat.setDate(nextRepeat.getDate() + 1);
-                  const item = {
-                      title: standard.title,
-                      discription: standard.discription,
-                      time: standard.time,
-                      date: nextRepeat.toISOString().split('T')[0],
-                      id: id
-                  };
-                  newEvent.push(item);
-              }
-          }
           if (rangeType === "weeks") {
-              for (let i = 1; i <= week; i++) {
+              for (let i = 1; i <= range; i++) {
                   nextRepeat.setDate(nextRepeat.getDate() + 7);
                   const item = {
                       title: standard.title,
@@ -61,7 +47,7 @@ const DailyEvents = () => {
           }
           if (rangeType === "months") {
               for (let i = 1; i <= month; i++) {
-                  nextRepeat.setMonth(nextRepeat.getMonth() + 1);
+                  nextRepeat.setDate(nextRepeat.getDate() + 7);
                   const item = {
                       title: standard.title,
                       discription: standard.discription,
@@ -74,7 +60,7 @@ const DailyEvents = () => {
           }
           if (rangeType === "years") {
               for (let i = 1; i <= year; i++) {
-                  nextRepeat.setFullYear(nextRepeat.getFullYear() + 1);
+                  nextRepeat.setDate(nextRepeat.getDate() + 7);
                   const item = {
                       title: standard.title,
                       discription: standard.discription,
@@ -87,7 +73,7 @@ const DailyEvents = () => {
           }
          
 
-     
+       
      
       axios
           .post("http://localhost:8000/users/multievents", newEvent)
@@ -99,6 +85,7 @@ const DailyEvents = () => {
 
   return (
     <div className='w-full px-10 py-2'>
+        <p>Weeek</p>
     <form className='shadow-md px-2 py-3 rounded-lg' onSubmit={HandleSubmit}>
         <table>
             <tbody>
@@ -130,7 +117,7 @@ const DailyEvents = () => {
 
                 <tr>
                     <td>
-                        <label>Starting date: </label>
+                         <label>Specific date: </label>
                         <input
                             name="date"
                             className="border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1"
@@ -151,7 +138,7 @@ const DailyEvents = () => {
                                 type='number'
                             />
                             <select onChange={(e) => setRangeType(e.target.value)} className='h-[35px]'>
-                                <option value='days'>Days</option>
+                              
                                 <option value='weeks'>Weeks</option>
                                 <option value='months'>Months</option>
                                 <option value='years'>Years</option>
@@ -187,4 +174,4 @@ const DailyEvents = () => {
   )
 }
 
-export default DailyEvents
+export default WeeklyEvents

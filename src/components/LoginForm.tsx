@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Login } from '../types/types';
-import { setLoginUser, setUserForm } from '../features/users';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Login, RootState } from '../types/types';
 import axios from 'axios';
 import { LoginResponse } from '../types/types';
 import { useNavigate } from 'react-router-dom';
+import { setMessage, setUserForm, setUserLogin, setUserNote } from '../features/users';
+import { getUser, setLog } from '../features/authe';
 
 const LoginForm = () => {
-  const dispatch = useDispatch();
+  
   const [login, setLogin] = useState<Login>({ email: '', password: '' });
+  const dispatch = useDispatch()
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -68,24 +70,48 @@ const LoginForm = () => {
         const res:any = await axios.post('http://localhost:8000/users/login', login);
         setLoading(false);
 
-        if (res.data.login === false) {
-          setErrors((prev) => ({ ...prev, general: 'Invalid email or password' }));
+        if (res.data.message === 'User not found') {
+           dispatch(setMessage(String(res.data.message)));
+           dispatch(setUserNote(true))
+           setTimeout(() => {
+            dispatch(setMessage(''))
+          }, 1000)
+          
+        }
+        if(res.data.message === 'Invalid password'){
+          dispatch(setMessage(String(res.data.message)))
+          dispatch(setUserNote(true))
+          setTimeout(() => {
+            dispatch(setMessage(''))
+          }, 1000)
         } else {
-          navigate('/dashboard');
+
+          dispatch(setMessage(String(res.data.message)))
+          dispatch(setUserNote(true))
+          dispatch(setUserLogin(Boolean(res.data.login)))
+          dispatch(setUserForm(false))
+            dispatch(setLog(true))
+            navigate('/dashboard')
+         
+
+          axios
+          .get('http://localhost:8000/users')
+          .then((res:any) => {
+            setMessage(res.data);
+            dispatch(getUser(res.data))
+          })
         }
       } catch (err) {
         setLoading(false);
-        setErrors((prev) => ({ ...prev, general: 'An error occurred. Please try again.' }));
+        
       }
     }
   };
 
   // Cancel login form
-  const cancel = () => {
-    setLogin({ email: '', password: '' }); // Reset form
-    setErrors({ email: '', password: '', general: '' }); // Reset errors
-    dispatch(setUserForm(false)); // Close form
-  };
+const  handleCancel = () =>{
+   dispatch(setUserForm(false))  
+}
 
   return (
     <form onSubmit={handleLogin} noValidate>
@@ -121,8 +147,7 @@ const LoginForm = () => {
         <p className="text-red-600">{errors.password}</p>
       </div>
 
-      {/* General error message */}
-      {errors.general && <p className="text-red-600 mb-4">{errors.general}</p>}
+    
 
       <div className="mb-4 flex gap-4">
         <button
@@ -134,7 +159,7 @@ const LoginForm = () => {
         </button>
         <span
           className="p-3 bg-lightcancelBtn rounded text-base font-bold text-white cursor-pointer"
-          onClick={cancel}
+          onClick={handleCancel}
         >
           Cancel
         </span>
@@ -143,4 +168,5 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default LoginForm; 
+ 

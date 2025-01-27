@@ -3,15 +3,19 @@ import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 
-const HomeRaute = () => {
+const AllRoutes = () => {
   return (
-    <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-    </Routes>
+    <div className='px-5'>
+        <Routes >
+                <Route path='/' element={<Home />} />
+                <Route path='/dashboard' element={<Dashboard />} />
+        </Routes>
+    </div>
+    
   )
 }
 
-export default HomeRaute
+export default AllRoutes
+
 
 

@@ -4,11 +4,12 @@ export interface User {
 }
 
 export interface UsersState {
-    user: User;
-    userForm:boolean;
-    isLoggedIn: boolean;
-    isRegisterd:boolean;
-    display:string;
+    
+    logSignForm:boolean;
+    notification:boolean;
+    message:string;
+    Form:string;
+    login:boolean;
 }
 
 
@@ -18,6 +19,8 @@ export interface EventsState {
     events: Event[];  
     isEvent: boolean;
     newEvent:boolean;
+    eventType:string;
+    repeat:string;
 }
 
 export interface RootState {
@@ -25,21 +28,35 @@ export interface RootState {
         events: Event[];  
         isEvent: boolean;
         newEvent:boolean;
+        eventType:string;
+        repeat:string;
     },
     users:{
-        user: User;
-        userForm:boolean;
-        isLoggedIn: boolean;
-        isRegisterd:boolean;
-        display:string;
+     
+        logSignForm:boolean;
+        notification:boolean
+        message:string;
+        Form:string;
+        login:boolean;
+    },
+    auth:{
+        user:AuthUser;
+        isLoggedIn:boolean;
     }
+
+     
+    
+}
+
+export interface UserData{
+    username:string;
+    email:string;
+    _id:string
 }
 
 
-
-
 export interface UsersInfo{
-    name:string;
+    username:string;
     email:string;
     password:string;
     date:string;
@@ -50,7 +67,7 @@ export interface  Signup extends UsersInfo{
   
 }
 export interface SignupValidator{
-    name:string;
+    username:string;
     email:string;
     password:string;
     confirmPassword:string;
@@ -62,6 +79,24 @@ export interface Login{
     password:string;
 }
 
+export interface userForm{
+  username:string,
+  email:string
+}
+export interface Auth{
+    user:AuthUser;
+    
+}
+
+export interface AuthUser{
+   user:{ username: string;
+           email:string;
+            _id:string;
+        },
+   isLoggedIn:boolean     
+
+}
+
 
 
 
@@ -70,6 +105,7 @@ export interface Event{
     discription:string;
     time:string;
     date:string;
+    id:string;
 }
 
 export interface Standard {
@@ -77,6 +113,7 @@ export interface Standard {
     discription:string;
     time:string;
     date:string;
+    id:string
   
 }
 
@@ -85,7 +122,18 @@ export interface Error{
 }
 
 
-
 export interface LoginResponse {
     login: boolean;
   }
+
+
+
+export interface SelectedDays{
+    Monday: boolean;
+    Tuesday: boolean;
+    Wednesday: boolean;
+    Thursday: boolean;
+    Friday: boolean;
+    Saturday: boolean;
+    Sunday: boolean;
+  };

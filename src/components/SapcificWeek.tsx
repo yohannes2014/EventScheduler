@@ -1,43 +1,98 @@
-import React from 'react'
-import { useDays } from '../hooks/useEvents';
+import React, { useState } from 'react';
+import { RootState, SelectedDays, Standard } from '../types/types';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const SapcificWeek = () => {
+    const id = useSelector((state:RootState)=>state.auth.user.user._id)
+    const [starting, setStarting] = useState<string>('');
+    const [ending, setEnding] = useState<string>('');
+    const [selectedDate, setSelectedDate] = useState<Number[]>([])
+    const [inputs, setInputs] = useState<Standard>({
+        title:'',
+        time:'',
+        date:'',
+        discription:'',
+        id:''
+    })
+
+
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+          const { name, value} = e.target;
+          setInputs({...inputs, [name]:value})
+    }
+
+    const handleWeekDays = (e:React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = e.target;
+
+         if(checked){
+           setSelectedDate((pre)=>[...pre, Number(value)])
+         }
+         else {
+            setSelectedDate((pre)=>pre.filter((day)=> day !== Number(value)))
+         }
+    }
+
+    const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+       e.preventDefault();
+       const start = new Date(starting);
+       const end = new Date(ending);
+       const newEvent:Standard[] = [];
+
+       for(let currentDate = start; currentDate<=end; currentDate.setDate(currentDate.getDate() + 1)){
+        const formattedDate = currentDate.toISOString().split('T')[0];
+        const weekDate = currentDate.getDay();
+
+        if(selectedDate.includes(weekDate)){
+            const event:Standard = {
+        
+                title:inputs.title,
+                time:inputs.time,
+                date:formattedDate,
+                discription:inputs.discription,
+                id:id
+            }
+            newEvent.push(event)
+        }
+       }
+       axios
+       .post("http://localhost:8000/users/multievents", newEvent)
+       .then(res => console.log(res.data))
+       .catch(err => console.log(err));
+
+    }
     
-    const {mon, setMon, tue, setTue, wed, setWed, thu, setThu, fri, setFri, sat, setSat, sun, setSun } = useDays();
-
-const handleWeek = () =>{
-
-}
+   
 
 
   return (
     <div className='w-full px-10 py-5'>
-    <form className='shadow-md px-2 py-3 rounded-lg'>
+    <form className='shadow-md px-2 py-3 rounded-lg' onSubmit={handleSubmit}>
         <table>
             <tbody>
             <tr>
                 <td>
                     <label>Title : </label>
-                    <input className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
+                    <input name='title' onChange={handleChange} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
                 </td>
             </tr>
 
             <tr>
                 <td>
                     <label>Time : </label>
-                    <input type='time' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
+                    <input type='time' name='time' onChange={handleChange} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
                 </td>
             </tr>
             <tr>
                 <td>
                     <label>Starting date : </label>
-                    <input className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
+                    <input onChange={(e)=>setStarting(e.target.value)} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
                 </td>
             </tr>
             <tr>
                 <td>
                     <label>Ending date : </label>
-                    <input className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
+                    <input onChange={(e)=>setEnding(e.target.value)} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
                 </td>
             </tr>
                 <tr>
@@ -46,32 +101,32 @@ const handleWeek = () =>{
                         <div className='flex gap-5'>
 
                             <div className='my-2'>
-                                <label htmlFor='mon' className={`rounded-full px-1 p-1 outline outline-blue-500 ${mon ? 'text-red-600  bg-primary' : 'text-primary'}`} >Mo</label>
-                                <input type='checkbox' onChange={handleWeek} id='mon' name='mon' hidden />
+                                <label htmlFor='mon' className={`rounded-full px-1 p-1 outline outline-blue-500 `} >Mo</label>
+                                <input type='checkbox'  onChange={handleWeekDays} id='mon' value={1} />
                             </div>
                             <div className='my-2'>
-                                <label htmlFor='tue' className={`rounded-full px-1 p-1 outline outline-blue-500 ${tue ? 'text-red-600  bg-primary' : 'text-primary'}`} >Tu</label>
-                                <input type='checkbox' onChange={handleWeek} id='tue' name='tue' hidden />
+                                <label htmlFor='tue' className={`rounded-full px-1 p-1 outline outline-blue-500 `} >Tu</label>
+                                <input type='checkbox'   onChange={handleWeekDays} id='tue' value={2} />
                             </div>
                             <div className='my-2'>
-                                <label htmlFor='wed' className={`rounded-full px-1 p-1 outline outline-blue-500 ${wed ? 'text-red-600  bg-primary' : 'text-primary'}`} >We</label>
-                                <input type='checkbox' onChange={handleWeek} name='wed' id='wed' hidden />
+                                <label htmlFor='wed' className={`rounded-full px-1 p-1 outline outline-blue-500 `} >We</label>
+                                <input type='checkbox'  onChange={handleWeekDays} value={3} id='wed' />
                             </div>
                             <div className='my-2'>
-                                <label htmlFor='thu' className={`rounded-full px-1 p-1 outline outline-blue-500 ${thu ? 'text-red-600  bg-primary' : 'text-primary'}`} >Th</label>
-                                <input type='checkbox' onChange={handleWeek} id='thu' name='thu' hidden />
+                                <label htmlFor='thu' className={`rounded-full px-1 p-1 outline outline-blue-500 `} >Th</label>
+                                <input type='checkbox'   onChange={handleWeekDays} id='thu' value={4} />
                             </div>
                             <div className='my-2'>
-                                <label htmlFor='fri' className={`rounded-full px-1 p-1 outline outline-blue-500 ${fri ? 'text-red-600  bg-primary' : 'text-primary'}`} >Fr</label>
-                                <input type='checkbox' onChange={handleWeek} name='fri' id='fri' hidden />
+                                <label htmlFor='fri' className={`rounded-full px-1 p-1 outline outline-blue-500 `} >Fr</label>
+                                <input type='checkbox'  onChange={handleWeekDays} value={5} id='fri' />
                             </div>
                             <div className='my-2'>
-                                <label htmlFor='sat' className={`rounded-full px-1 p-1 outline outline-blue-500 ${sat ? 'text-red-600  bg-primary' : 'text-primary'}`} >Sa</label>
-                                <input type='checkbox' onChange={handleWeek} name='sat' id='sat' hidden />
+                                <label htmlFor='sat' className={`rounded-full px-1 p-1 outline outline-blue-500 `} >Sa</label>
+                                <input type='checkbox' onChange={handleWeekDays} value={6} id='sat' />
                             </div>
                             <div className='my-2'>
-                                <label htmlFor='sun' className={`rounded-full px-1 p-1 outline outline-blue-500 ${sun ? 'text-red-600  bg-primary' : 'text-primary'}`} >Su</label>
-                                <input type='checkbox' onChange={handleWeek} name='sun' id='sun' hidden />
+                                <label htmlFor='sun' className={`rounded-full px-1 p-1 outline outline-blue-500 `} >Su</label>
+                                <input type='checkbox'  onChange={handleWeekDays} value={0} id='sun' />
                             </div>
                         </div>
                     </td>
@@ -80,7 +135,7 @@ const handleWeek = () =>{
             <tr>
                 <td>
                     <label>Discription : </label>
-                    <textarea placeholder='Discription...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
+                    <textarea name='discription' onChange={handleChange} placeholder='Discription...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
                 </td>
             </tr>
             <tr>
