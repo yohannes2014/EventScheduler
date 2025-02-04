@@ -1,19 +1,17 @@
-import { useSelector } from "react-redux";
-import { RootState, Standard } from "../types/types";
+import { Event } from "../types/types";
 import { useState } from "react";
 import axios from "axios";
 
 const  YearlyEvents = () => {
   const [range, setRange] = useState<number>(0);
   const [rangeType, setRangeType] = useState<string>('years');
-  const id = useSelector((state: RootState) => state.auth.user.user._id);
 
-  const [standard, setStandard] = useState<Standard>({
+  const [standard, setStandard] = useState<Event>({
       title: '',
-      discription: '',
+      description: '',
       time: '',
       date: '',
-      id: ''
+    
   });
 
   const HandleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -26,17 +24,17 @@ const  YearlyEvents = () => {
 
       const start = new Date(standard.date);
       let nextRepeat = new Date(start);
-      const newEvent: Standard[] = [];
+      const newEvent: Event[] = [];
 
           if (rangeType === "years") {
               for (let i = 1; i <= range; i++) {
                   nextRepeat.setFullYear(nextRepeat.getFullYear() + 1);
                   const item = {
                       title: standard.title,
-                      discription: standard.discription,
+                      description: standard.description,
                       time: standard.time,
-                      date: nextRepeat.toISOString().split('T')[0],
-                      id: id
+                      date: nextRepeat.toISOString().split('T')[0]
+                    
                   };
                   newEvent.push(item);
               }
@@ -44,9 +42,8 @@ const  YearlyEvents = () => {
          
 
        
-     
-      axios
-          .post("http://localhost:8000/users/multievents", newEvent)
+          axios
+          .post("http://localhost:8000/api/events/multiple", newEvent)
           .then(res => console.log(res.data))
           .catch(err => console.log(err));
   };
@@ -121,10 +118,10 @@ const  YearlyEvents = () => {
                         <label>Description: </label>
                         <textarea
                             onChange={HandleChange}
-                            name='discription'
+                            name='description'
                             placeholder='Description...'
                             className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'
-                            value={standard.discription}
+                            value={standard.description}
                         ></textarea>
                     </td>
                 </tr>

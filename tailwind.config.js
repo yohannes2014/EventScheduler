@@ -10,7 +10,7 @@ module.exports = {
         lightcancelBtn:"#99a38b",
         cancelBtn:"#abb898",
         submitBtn:"#272075",
-        niceback:"rgba(205, 209, 234, 0.3)",
+        niceback:"#CDD1EA4D",
         nicebackDark:"#e8e9ed"
         
         

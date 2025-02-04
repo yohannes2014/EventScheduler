@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Login, RootState } from '../types/types';
+import React from 'react';
+import { useLogin, useLoginError } from '../hooks/useUsers';
 import axios from 'axios';
-import { LoginResponse } from '../types/types';
+import { loginApi } from '../api/api';
+import { setLoginLoading, setUserForm, setUserLogin } from '../features/users';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../types/types';
 import { useNavigate } from 'react-router-dom';
-import { setMessage, setUserForm, setUserLogin, setUserNote } from '../features/users';
-import { getUser, setLog } from '../features/authe';
+import { setMessage } from '../features/authe';
+
 
 const LoginForm = () => {
   
-  const [login, setLogin] = useState<Login>({ email: '', password: '' });
-  const dispatch = useDispatch()
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-    general: '',
-  });
-  const [loading, setLoading] = useState(false);
+  const {login, setLogin} = useLogin();
+  const {errors, setErrors} = useLoginError();
+  const loading = useSelector((state:RootState)=>state.users.loginload);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
+ 
   // Handle email change with validation
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLogin((prev) => ({ ...prev, [name]: value }));
-    axios.defaults.withCredentials = true;
-
     // Validate email format
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!value || value.length < 5) {
@@ -51,7 +49,7 @@ const LoginForm = () => {
   // Handle form submission with validation and API call
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newErrors = { email: '', password: '', general: '' };
+    const newErrors = { email: '', password: '' };
 
     if (!login.email) {
       newErrors.email = 'Email cannot be empty';
@@ -63,48 +61,40 @@ const LoginForm = () => {
 
     setErrors(newErrors);
 
+   axios.defaults.withCredentials = true;
     // If no errors, proceed to login
     if (!newErrors.email && !newErrors.password) {
-      setLoading(true);
-      try {
-        const res:any = await axios.post('http://localhost:8000/users/login', login);
-        setLoading(false);
+      dispatch(setLoginLoading(true))
+      axios.post(loginApi, login, )
+      .then(res=>{
 
-        if (res.data.message === 'User not found') {
-           dispatch(setMessage(String(res.data.message)));
-           dispatch(setUserNote(true))
-           setTimeout(() => {
-            dispatch(setMessage(''))
-          }, 1000)
+        
+        if(res.data.login){
+          dispatch(setMessage(res.data.message));
+          dispatch(setUserForm(false))
+          dispatch(setUserLogin(true))
+         navigate('/dashboard'); 
           
         }
-        if(res.data.message === 'Invalid password'){
-          dispatch(setMessage(String(res.data.message)))
-          dispatch(setUserNote(true))
+
+        dispatch(setMessage(res.data.message))
+     
+      })
+      .catch(err=>{
+        dispatch(setMessage(err.message))
+       
+        
+      })
+      .finally(()=>{
+        dispatch(setLoginLoading(false));
+
           setTimeout(() => {
             dispatch(setMessage(''))
-          }, 1000)
-        } else {
-
-          dispatch(setMessage(String(res.data.message)))
-          dispatch(setUserNote(true))
-          dispatch(setUserLogin(Boolean(res.data.login)))
-          dispatch(setUserForm(false))
-            dispatch(setLog(true))
-            navigate('/dashboard')
-         
-
-          axios
-          .get('http://localhost:8000/users')
-          .then((res:any) => {
-            setMessage(res.data);
-            dispatch(getUser(res.data))
-          })
-        }
-      } catch (err) {
-        setLoading(false);
+          }, 2500)
         
-      }
+      });
+
+
     }
   };
 
@@ -126,7 +116,7 @@ const  handleCancel = () =>{
           placeholder="Enter your email"
           onChange={handleEmail}
           value={login.email}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <p className="text-red-600">{errors.email}</p>
       </div>
@@ -142,7 +132,7 @@ const  handleCancel = () =>{
           placeholder="Enter your password"
           onChange={handlePassword}
           value={login.password}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <p className="text-red-600">{errors.password}</p>
       </div>
@@ -152,13 +142,13 @@ const  handleCancel = () =>{
       <div className="mb-4 flex gap-4">
         <button
           type="submit"
-          disabled={loading}
-          className="w-full bg-primary p-3 text-white rounded text-base font-bold hover:bg-lightPrimary"
+          
+          className={`${loading ? 'disabled bg-[#0e1457]':' bg-[#020742]'} w-full p-3 text-white rounded text-base font-bold  hover:bg-[#0e1457]`}
         >
           {loading ? 'Loading...' : 'Login'}
         </button>
         <span
-          className="p-3 bg-lightcancelBtn rounded text-base font-bold text-white cursor-pointer"
+          className={`${loading ? 'disabled bg-[#abb898]':'bg-[#99a38b]'} p-3 bg-[#99a38b] rounded text-base font-bold text-white cursor-pointer hover:bg-[#abb898]`}
           onClick={handleCancel}
         >
           Cancel

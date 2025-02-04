@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Event, RootState, Standard } from "../types/types";
+import { Event} from "../types/types";
 
 
 
@@ -17,8 +17,8 @@ export const useSingle = () => {
     title: '',
     date: '',
     time: '',
-    discription: '',
-    id:'',
+    description: ''
+    
   });
  return {single, setSingle}
 }

@@ -1,20 +1,19 @@
-import { useSelector } from "react-redux";
-import { RootState, Standard } from "../types/types";
+
+import { Event } from "../types/types";
 import { useState } from "react";
 import axios from "axios";
 
 const MonthlyEvents = () => {
-  const [repeat, setRepeat] = useState<string>('daily');
   const [range, setRange] = useState<number>(0);
   const [rangeType, setRangeType] = useState<string>('months');
-  const id = useSelector((state: RootState) => state.auth.user.user._id);
 
-  const [standard, setStandard] = useState<Standard>({
+
+  const [standard, setStandard] = useState<Event>({
       title: '',
-      discription: '',
+      description: '',
       time: '',
-      date: '',
-      id: ''
+      date: ''
+     
   });
 
   const HandleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -27,7 +26,7 @@ const MonthlyEvents = () => {
 
       const start = new Date(standard.date);
       let nextRepeat = new Date(start);
-      const newEvent: Standard[] = [];
+      const newEvent: Event[] = [];
     
       const year = range * 12;
 
@@ -36,10 +35,10 @@ const MonthlyEvents = () => {
                   nextRepeat.setMonth(nextRepeat.getMonth() + 1);
                   const item = {
                       title: standard.title,
-                      discription: standard.discription,
+                      description: standard.description,
                       time: standard.time,
-                      date: nextRepeat.toISOString().split('T')[0],
-                      id: id
+                      date: nextRepeat.toISOString().split('T')[0]
+                      
                   };
                   newEvent.push(item);
               }
@@ -49,10 +48,10 @@ const MonthlyEvents = () => {
                   nextRepeat.setMonth(nextRepeat.getMonth() + 1);
                   const item = {
                       title: standard.title,
-                      discription: standard.discription,
+                      description: standard.description,
                       time: standard.time,
                       date: nextRepeat.toISOString().split('T')[0],
-                      id: id
+                      
                   };
                   newEvent.push(item);
               }
@@ -61,8 +60,8 @@ const MonthlyEvents = () => {
 
        
      
-      axios
-          .post("http://localhost:8000/users/multievents", newEvent)
+          axios
+          .post("http://localhost:8000/api/events/multiple", newEvent)
           .then(res => console.log(res.data))
           .catch(err => console.log(err));
   };
@@ -138,10 +137,10 @@ const MonthlyEvents = () => {
                         <label>Description: </label>
                         <textarea
                             onChange={HandleChange}
-                            name='discription'
+                            name='description'
                             placeholder='Description...'
                             className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'
-                            value={standard.discription}
+                            value={standard.description}
                         ></textarea>
                     </td>
                 </tr>

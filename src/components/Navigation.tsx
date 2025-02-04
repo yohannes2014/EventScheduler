@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { RootState } from '../types/types';
-import { setUserForm } from '../features/users';
+import { setUserForm } from '../features/users';/* 
+import axios from 'axios'; */
 import axios from 'axios';
-import { getUser, setLog } from '../features/authe';
-
-
+import { logOutApi } from '../api/api';
 const Navigation:React.FC = () => {
 
-const [message, setMessage] = useState()
-const loginn = useSelector((state:RootState)=>state.users.login)
+
+const login = useSelector((state:RootState)=>state.users.login)
   const dispatch = useDispatch();
 
   const userLoginForm = () => {
@@ -19,18 +18,20 @@ const loginn = useSelector((state:RootState)=>state.users.login)
 
   }
 
-  const navigate = useNavigate()
-
-const userLogOut = () =>{
   
-  axios.post('http://localhost:8000/users/logout')
-  .then((res:any)=>{
 
-    dispatch(setLog(false));
-    navigate('/')
-  }).catch(err=>console.log(err));
+
+
+const navigate = useNavigate();
+const logoutUser = () =>{
+
+  axios.post(logOutApi)
+  .then(()=>{
+ navigate('/');
+ //here we can add success message
    
-
+    
+  }).catch(err=>console.log(err));
    
 }
 
@@ -39,11 +40,12 @@ const userLogOut = () =>{
 
 
   return (
-    <div className='shadow-md h-[80px] lg:h-[90px] sticky top-0 flex justify-between px-5 py-a w-full items-center bg-white right-0 text-primary'>
-      <Link to={'/'} className='text-xl font-black '>Event Scheduler</Link>
+    <div className='shadow-md z-2 h-[80px] lg:h-[90px] sticky top-0 flex justify-between px-5 py-a w-full items-center bg-white right-0 text-primary'>
+      <Link to={'/'} className='xl:text-4xl lg:text-3lx md:text-2xl text-[#020742] text-xl font-black '>Event Scheduler</Link>
       <div>
-   {!loginn && <button onClick={userLoginForm} className='bg-niceback text-Primary px-3 py-1 font-bold rounded-md hover:bg-nicebackDark' >Login</button>}
-  <button onClick={userLogOut} className='bg-primary text-white px-3 py-1 font-bold rounded-md hover:bg-lightPrimary' >LoginOut</button>
+   {!login && <button onClick={userLoginForm} className=' bg-[#CDD1EA4D] text-Primary px-3 py-1 font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] lg:text-lg' >Login</button>}
+   <button onClick={logoutUser} className=' bg-[#CDD1EA4D] text-Primary px-3 py-1 font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] lg:text-lg' >Login Out</button>
+
       
       </div>
     </div>

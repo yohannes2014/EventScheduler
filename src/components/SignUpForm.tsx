@@ -1,16 +1,18 @@
 import React from 'react';
-import { SignupValidator, UsersInfo } from '../types/types';
-import { useDispatch } from 'react-redux';
+import { RootState, SignupValidator, UsersInfo } from '../types/types';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useSignup, useSignupError } from '../hooks/useUsers';
-import { signUpApi } from '../api/usersApi';
-import { setUserForm, setMessage, setForm } from '../features/users';
+ import { signUpApi } from '../api/api';
+import { setUserForm, setSignupLoading, setForm,/* setForm  */} from '../features/users';
+import { setMessage } from '../features/authe';
 
 const SignUpForm = () => {
 
  
   const {signUp, setSignUp} = useSignup();
   const {errors, setErrors} = useSignupError();
+  const loading = useSelector((state:RootState)=>state.users.signupLoading)
 
   const dispatch = useDispatch();
 
@@ -78,36 +80,39 @@ const SignUpForm = () => {
     setErrors(validationErrors);
 
     // Check if there are any errors
+  
     const isValid = !Object.values(validationErrors).some((error) => error);
     if (isValid) {
+      dispatch(setSignupLoading(true))
       const newUser: UsersInfo = {
         username: signUp.username,
-        email: signUp.email,
-        password: signUp.password,
-        date: new Date().toISOString(),
+         email: signUp.email,
+        password: signUp.password
       };
 
-      axios.post(signUpApi, newUser)
-      .then(result =>{
-        dispatch(setMessage(String(result.data)));
+axios.post(signUpApi, newUser)
+.then(res=>{
+ 
+ if(res.data === "Successfully registered"){
+  dispatch(setMessage(res.data));
+  dispatch(setForm('login'))
 
-        setTimeout(() => {
-          dispatch(setMessage(''))
-        }, 1500);
-        if(result.data === 'Successfully registered'){
-          dispatch(setMessage(String(result.data)));
-          setTimeout(() => {
-            
-            dispatch(setForm('login'))
-            
-          }, 1000);
-       
-          
-        }
-      })
-      .catch(err=> console.log(err))
-    }
-  };
+ }
+ 
+ dispatch(setMessage(res.data));
+
+})
+.catch(err=>(dispatch(setMessage(err.message))))
+.finally(()=>{
+  dispatch(setSignupLoading(false));
+
+  setTimeout(() => {
+    dispatch(setMessage(''))
+  }, 2500);
+})
+  }
+  
+}
 
 
 
@@ -127,7 +132,7 @@ const  handleCancel = () =>{
           name="username"
           placeholder="Enter your name"
           onChange={handleName}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:lightPrimary"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <p className="text-red-600">{errors.username}</p>
       </div>
@@ -141,7 +146,7 @@ const  handleCancel = () =>{
           name="email"
           placeholder="Enter your email"
           onChange={handleEmail}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:lightPrimary"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <p className="text-red-600">{errors.email}</p>
       </div>
@@ -155,7 +160,7 @@ const  handleCancel = () =>{
           name="password"
           placeholder="Enter your password"
           onChange={handlePassword}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:lightPrimary"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <p className="text-red-600">{errors.password}</p>
       </div>
@@ -169,19 +174,20 @@ const  handleCancel = () =>{
           name="confirmPassword"
           placeholder="Repeat Password"
           onChange={handleConfirmPassword}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:lightPrimary"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
         <p className="text-red-600">{errors.confirmPassword}</p>
       </div>
       <div className="mb-4 flex gap-6">
         <button
           type="submit"
-          className="w-full bg-primary p-3 text-white rounded text-base font-bold hover:bg-lightPrimary"
+          className={` ${loading ? 'disabled bg-[#172285]':'cursor-pointer hover:bg-[#0e1457]'} w-full bg-[#020742] p-3 text-white rounded text-base font-bold`}
         >
-          Sign up
+         {loading ?  'Loading...' : 'Sign up'}
+         
         </button>
         <span
-          className="p-3 bg-lightcancelBtn rounded text-base font-bold text-white cursor-pointer"
+          className={` ${loading ? 'disabled bg-[#bdc4b5]':'cursor-pointer hover:bg-[#abb898]'} p-3 bg-[#99a38b] rounded text-base font-bold text-white `}
           onClick={handleCancel}
         >
           Cancel

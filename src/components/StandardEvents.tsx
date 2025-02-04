@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import DailyEvents from "./DailyEvents";
-import MonyhlyEvents from "./MonyhlyEvents";
+import MonthlyEvents from "./MonthlyEvents";
 import WeeklyEvents from "./WeeklyEvents";
 import YearlyEvents from "./YearlyEvents";
 import { RootState } from "../types/types";
@@ -22,7 +22,7 @@ const StandardEvents = () => {
        </div>
             {repeat === 'daily' && <DailyEvents />}
              {repeat === 'weekly' && <WeeklyEvents />}
-             {repeat === 'monthly' && <MonyhlyEvents />}
+             {repeat === 'monthly' && <MonthlyEvents />}
              {repeat === 'yearly' && <YearlyEvents />}
 
 

@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "../types/types"
 
 const Note = () => {
-  const message = useSelector((state:RootState) => state.users.message)
+  const message = useSelector((state:RootState) => state.auth.message)
 
   return (
     <div className="w-full h-[30px] flex justify-center rounded-sm top-[100px] my-1 overflow-hidden">

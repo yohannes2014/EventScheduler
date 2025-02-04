@@ -1,16 +1,18 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {useSingleEvent} from '../hooks/useEvents';
-import { setNewEvent } from '../features/events';
 import axios from 'axios';
 import { addEvent } from '../api/api';
-import { Event } from '../types/types';
+import { Event, RootState } from '../types/types';
+import { setAddCalecder, setAddNewEvent } from '../features/events';
 
-const SingleEvent: React.FC = () => {
+const CalenderEventForm:React.FC = () => {
+
+
   
   const {single, setSingle} = useSingleEvent(); 
   const dispatch = useDispatch();
- 
+ const selectedDate = useSelector((state:RootState)=>state.events.selectedDate)
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -25,20 +27,21 @@ const SingleEvent: React.FC = () => {
       title:single.title,
       time: single.time,
       description: single.description,
-      date: single.date
+      date:selectedDate
     }
 
 
-   axios.post(addEvent, newEvent)
-   .then(res=>console.log(res.data))
-   .catch(err=>console.log(err));
-   
 
+  axios.post(addEvent, newEvent)
+  .then(()=>dispatch(setAddNewEvent(newEvent)))
+  .catch(err=>console.log(err));
+  
+ dispatch(setAddCalecder(false))
    
   };
 
   return (
-    <div className="w-full px-3 py-5">
+    <div className="w-full px-10 py-5">
       <form className="shadow-md px-2 py-3 rounded-lg" onSubmit={handleSubmit}>
         <table className="w-full">
           <tbody>
@@ -61,8 +64,9 @@ const SingleEvent: React.FC = () => {
                 <input
                   name="date"
                   className="border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1"
-                  type="date"
-                  value={single.date}
+                  type="text"
+                  value={selectedDate}
+                  disabled
                   onChange={handleChange}
                 />
               </td>
@@ -98,7 +102,7 @@ const SingleEvent: React.FC = () => {
                 </button>
                 <p
                   className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
-                  onClick={()=>dispatch(setNewEvent(false))}
+                  onClick={()=>dispatch(setAddCalecder(false))}
                 >
                   Cancel
                 </p>
@@ -111,5 +115,7 @@ const SingleEvent: React.FC = () => {
   );
 };
 
-export default SingleEvent;
- 
+
+
+
+export default CalenderEventForm

@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { RootState, SelectedDays, Standard } from '../types/types';
-import { useSelector } from 'react-redux';
+import { Event } from '../types/types';
 import axios from 'axios';
 
 const SapcificWeek = () => {
-    const id = useSelector((state:RootState)=>state.auth.user.user._id)
+   
     const [starting, setStarting] = useState<string>('');
     const [ending, setEnding] = useState<string>('');
     const [selectedDate, setSelectedDate] = useState<Number[]>([])
-    const [inputs, setInputs] = useState<Standard>({
+    const [inputs, setInputs] = useState<Event>({
         title:'',
         time:'',
         date:'',
-        discription:'',
-        id:''
+        description:''
+        
     })
 
 
@@ -37,29 +36,28 @@ const SapcificWeek = () => {
        e.preventDefault();
        const start = new Date(starting);
        const end = new Date(ending);
-       const newEvent:Standard[] = [];
+       const newEvent:Event[] = [];
 
        for(let currentDate = start; currentDate<=end; currentDate.setDate(currentDate.getDate() + 1)){
         const formattedDate = currentDate.toISOString().split('T')[0];
         const weekDate = currentDate.getDay();
 
         if(selectedDate.includes(weekDate)){
-            const event:Standard = {
+            const event:Event = {
         
                 title:inputs.title,
                 time:inputs.time,
                 date:formattedDate,
-                discription:inputs.discription,
-                id:id
+                description:inputs.description
+                
             }
             newEvent.push(event)
         }
        }
        axios
-       .post("http://localhost:8000/users/multievents", newEvent)
+       .post("http://localhost:8000/api/events/multiple", newEvent)
        .then(res => console.log(res.data))
        .catch(err => console.log(err));
-
     }
     
    
@@ -134,8 +132,8 @@ const SapcificWeek = () => {
             
             <tr>
                 <td>
-                    <label>Discription : </label>
-                    <textarea name='discription' onChange={handleChange} placeholder='Discription...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
+                    <label>description : </label>
+                    <textarea name='description' onChange={handleChange} placeholder='description...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
                 </td>
             </tr>
             <tr>

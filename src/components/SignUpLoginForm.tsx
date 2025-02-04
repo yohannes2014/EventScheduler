@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../types/types';import { setForm, setMessage } from '../features/users';
+import { RootState } from '../types/types';
+import { setForm } from '../features/users';
 import Note from './Note';
 ;
 
@@ -31,10 +32,10 @@ const SignUpLoginForm:React.FC = () => {
   return (
     <>
      {formUser && 
-     <div className='fixed w-screen h-screen flex justify-center items-center bg-niceback backdrop-blur-myBlur'>
+     <div className='fixed w-screen m-auto h-screen flex justify-center items-center bg-[rgba(205, 209, 234, 0.681)] backdrop-blur-[4px]'>
 
          
-     <div  className= 'border-2 bg-white top-32m-auto w-full md:w-[600px]  shadow rounded-lg  p-4'>
+     <div  className= 'border-2 bg-white top-32m-auto w-full md:w-[600px] mx-4 shadow rounded-lg p-4'>
       <Note />
            <div className="mb-2 flex gap-2">
          <span onClick={handleLogin} className={`w-full cursor-pointer hover:bg-yellow-100 text-center text-primary border-2 font-bold text-lg ${form === 'login'&& 'bg-yellow-100'} `}>Login</span>

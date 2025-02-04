@@ -1,96 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect }  from 'react';
 import DashboardHeader from '../components/DashboardHeader';
+import Calender from '../components/Calender';
+import ListEvent from '../components/ListEvent';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
 import axios from 'axios';
-import Calender from '../components/Calender';
-import ListEvent from '../components/ListEvent';
-import { getUser } from '../features/authe';
+import { UserSData } from '../api/api';
 import { useNavigate } from 'react-router-dom';
-import NewEvent from '../components/NewEvent';
-import Notes from '../components/Test';
-import EventScheduler from '../components/TestForm';
-import TestNew from '../components/TestNew';
+import { getUser } from '../features/authe'; 
+import { setUserEvents } from '../features/events';
+import Notification from '../components/Notification';
 
-const Dashboard = () => {
 
-  const [message, setMessage] = useState<any>()
-  const user = useSelector((state:RootState)=>state.auth.user)
+const Dashboard:React.FC = () => {
  
+  const display = useSelector((state:RootState)=>state.events.display);
+  const notification = useSelector((state:RootState)=>state.users.notifCard)
+    axios.defaults.withCredentials = true;
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+  
 
 
-
-
-/*  useEffect(()=>{
-  axios
-      .get('http://localhost:8000/users/dashboard')
-      .then((res:any) => {
-         setMessage(res)
-      })
-      .catch((err) => {
-        console.error(err);
-       
-      })
-
- }) */
-const dispatch = useDispatch()
-
-    useEffect(()=>{
-    axios
-    .get('http://localhost:8000/users')
-    .then((res:any) => {
-      setMessage(res.data);
-      dispatch(getUser(res.data))
-    })
-    .catch((err) => {
-      console.error(err);
-     
-    }) }, [])
-  /*
-    const userPro = () => {
-   
-      axios
-    .get('http://localhost:8000/users/tokenRefresh')
-    .then((res:any) => {
-      
-    })
-    .catch((err) => {
-      console.error(err);
-     
-    })
-
-    
-   }  
-
-   */
-
-
-const LogUser = useSelector((state:RootState)=>state.auth.user.isLoggedIn);
-const navigate = useNavigate()
-
-/* useEffect(()=>{
-if(LogUser === false){
-   navigate('/')
-   console.log(LogUser)
-}
-},[])
- */
+useEffect(()=>{
+  axios.get(UserSData)
+.then((res)=>{
+  dispatch(getUser(res.data.userInfo));
+  dispatch(setUserEvents(res.data.events))
+ 
+  
+}).catch(() =>{
+ 
+  return navigate('/')
+  
+})
+}) 
+ 
 
 
   return (
    
-    <div className="">
+    <div className='w-full'>
       <DashboardHeader />
-     
-    
-      <div className='flex justify-center'>
-          <Calender />
-          <ListEvent />
-        
-        
-       
 
-       
+
+      <div className='flex justify-center my-10'>
+      {notification && <Notification />}
+          {display === "calender" && <Calender />}
+         {display === 'list' && <ListEvent />}
+         
       </div>
     </div>
 

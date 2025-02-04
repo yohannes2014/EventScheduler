@@ -1,26 +1,25 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from './types/types';
-import SignUpLoginForm from './components/SignUpLoginForm';
-import Navigation from './components/Navigation';
-import AllRoutes from './routes/AllRoutes';
-import NewEvent from './components/NewEvent';
+import Navigation from "./components/Navigation"
+import NewEvent from "./components/NewEvent"
+import SignUpLoginForm from "./components/SignUpLoginForm"
+import AllRoutes from "./routes/AllRoutes"
 
-const App:React.FC = () => {
+function App() {
 
-const newEvent = useSelector((state:RootState)=>state.events.newEvent)
-  
+
   return (
     <>
       <SignUpLoginForm />
-      {newEvent && <NewEvent />}
-      <div className='w-full lg:px-7 xl:w-[1120px] m-auto'>
-      <Navigation />
-      <AllRoutes />
-      </div>
-        
+       <NewEvent />
+
+   
+      <div className="xl:w-[1200px] m-auto">
+        <Navigation />
+        <AllRoutes />
+        </div>
+    
     </>
-  );
+
+  )
 }
 
-export default App;
+export default App

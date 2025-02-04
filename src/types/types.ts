@@ -1,65 +1,79 @@
-export interface User {
-    userName: string;
-    email: string;
-}
 
 export interface UsersState {
     
     logSignForm:boolean;
-    notification:boolean;
-    message:string;
     Form:string;
     login:boolean;
+    signupLoading:boolean;
+    loginload:boolean;
+    notifCard:boolean,
+    notification:string,
+    notificationName:string,
 }
 
 
 
 
 export interface EventsState {
-    events: Event[];  
+    events: Event | null; 
+    selectedEvent:Event[]; 
+    selectedDate:String;
     isEvent: boolean;
     newEvent:boolean;
     eventType:string;
     repeat:string;
+    display:string;
+    userEvent:UserEvent[];
+    singleEvent:UserEvent;
+    addCalender:boolean;
+    AddnewEvent:Event;
 }
 
 export interface RootState {
     events:{
         events: Event[];  
         isEvent: boolean;
+        selectedEvent:Event[];
+        selectedDate:string;
         newEvent:boolean;
         eventType:string;
         repeat:string;
+        display:string;
+        userEvent:UserEvent[];
+        singleEvent:UserEvent;
+        addCalender:boolean; 
+        AddnewEvent:Event;
+     
     },
     users:{
      
         logSignForm:boolean;
-        notification:boolean
-        message:string;
         Form:string;
         login:boolean;
+        signupLoading:boolean;
+        loginload:boolean;
+        notifCard:boolean,
+        notification:string,
+        notificationName:string,
+  
     },
     auth:{
-        user:AuthUser;
+        user:UserInfo;
         isLoggedIn:boolean;
+        message:string; 
     }
 
      
     
 }
 
-export interface UserData{
-    username:string;
-    email:string;
-    _id:string
-}
 
 
 export interface UsersInfo{
     username:string;
     email:string;
     password:string;
-    date:string;
+    
 }
 export interface  Signup extends UsersInfo{
   
@@ -79,22 +93,18 @@ export interface Login{
     password:string;
 }
 
-export interface userForm{
-  username:string,
-  email:string
-}
-export interface Auth{
-    user:AuthUser;
-    
-}
 
 export interface AuthUser{
-   user:{ username: string;
-           email:string;
-            _id:string;
-        },
-   isLoggedIn:boolean     
+   user:UserInfo | null;
+   isLoggedIn:boolean;
+   message:string;     
 
+}
+
+export interface UserInfo{
+    username: string;
+    email:string;
+    _id:string;
 }
 
 
@@ -102,24 +112,15 @@ export interface AuthUser{
 
 export interface Event{
     title:string;
-    discription:string;
+    description:string;
     time:string;
     date:string;
-    id:string;
 }
 
-export interface Standard {
-    title:string;
-    discription:string;
-    time:string;
-    date:string;
-    id:string
-  
+export interface UserEvent extends Event{
+    _id:string;
 }
 
-export interface Error{
-    message:string
-}
 
 
 export interface LoginResponse {

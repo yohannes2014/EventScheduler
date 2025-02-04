@@ -1,22 +1,20 @@
-import React, { useState } from 'react'
-import { RootState, Standard } from '../types/types'
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import {  Event } from '../types/types';
 import axios from 'axios';
 
 const RecInterval = () => {
-    const [newEvent, setNewEvent] = useState<Standard[]>([])
-    const [events, setEvnts] = useState<Standard>({
+  
+    const [events, setEvnts] = useState<Event>({
         title:'',
         date:'',
         time:'',
-        discription:'',
-        id:''
+        description:''
+        
     });
     const [repeat, setRepeat] = useState<number>(0);
     const [repeatType, setRepeatType] = useState<string>('days');
     const [starting, setStarting]= useState<string>('');
-    const [ending, setEnding] = useState<string>('')
-    const id = useSelector((state: RootState) => state.auth.user.user._id);
+    const [ending, setEnding] = useState<string>('');
 
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -27,7 +25,7 @@ const RecInterval = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
       
-        const newEvent: Standard[] = [];
+        const newEvent: Event[] = [];
         const start = new Date(starting);
         const end = new Date(ending);
       
@@ -39,48 +37,44 @@ const RecInterval = () => {
           alert('Starting day cannot be before ending');
           return;
         }
-      
-        const totalMiliSec = end.getTime() - start.getTime(); // Milliseconds between start and end
-        const range = totalMiliSec / (1000 * 3600 * 24); // Convert milliseconds to days
-      
+    
         // Loop through dates using a for loop
     
        if(repeatType === 'days'){ for (let nextRepeat = start; nextRepeat <= end; nextRepeat.setDate(nextRepeat.getDate() + repeatEvery)) {
-          const item:Standard = {
+          const item:Event = {
             title: events.title,
             time:events.time,
             date: nextRepeat.toISOString().split('T')[0], // Format as YYYY-MM-DD
-            discription:events.discription,
-            id:id
+            description:events.description
+          
           };
           newEvent.push(item);
         }}
        if(repeatType === 'weeks'){ for (let nextRepeat = start; nextRepeat <= end; nextRepeat.setDate(nextRepeat.getDate() + repeatWeekly)) {
-          const item:Standard = {
+          const item:Event = {
             title: events.title,
             time:events.time,   
             date: nextRepeat.toISOString().split('T')[0], // Format as YYYY-MM-DD
-            discription:events.discription,
-            id:id
+            description:events.description
+            
           };
           newEvent.push(item);
         }}
        if(repeatType === 'months'){ for (let nextRepeat = start; nextRepeat <= end; nextRepeat.setMonth(nextRepeat.getMonth() + repeatEvery)) {
-          const item:Standard = {
+          const item:Event = {
             title: events.title,
             time:events.time,
             date: nextRepeat.toISOString().split('T')[0], // Format as YYYY-MM-DD
-            discription:events.discription,
-            id:id
+            description:events.description
+          
           };
           newEvent.push(item);
         }}
       
         axios
-        .post("http://localhost:8000/users/multievents", newEvent)
+        .post("http://localhost:8000/api/events/multiple", newEvent)
         .then(res => console.log(res.data))
-        .catch(err => console.log(err))
-
+        .catch(err => console.log(err));
       };
       
   
@@ -132,8 +126,8 @@ const RecInterval = () => {
         
            <tr>
                <td>
-                    <label>Discription : </label>
-                    <textarea value={events.discription} name='discription' onChange={handleChange} placeholder='Discription...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
+                    <label>description : </label>
+                    <textarea value={events.description} name='description' onChange={handleChange} placeholder='description...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
                </td>
            </tr>
            <tr>
