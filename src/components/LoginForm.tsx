@@ -2,7 +2,7 @@ import React from 'react';
 import { useLogin, useLoginError } from '../hooks/useUsers';
 import axios from 'axios';
 import { loginApi } from '../api/api';
-import { setLoginLoading, setUserForm, setUserLogin } from '../features/users';
+import { setLoginLoading, setUserForm } from '../features/users';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
 import { useNavigate } from 'react-router-dom';
@@ -72,7 +72,7 @@ const LoginForm = () => {
         if(res.data.login){
           dispatch(setMessage(res.data.message));
           dispatch(setUserForm(false))
-          dispatch(setUserLogin(true))
+         
          navigate('/dashboard'); 
           
         }
@@ -143,7 +143,7 @@ const  handleCancel = () =>{
         <button
           type="submit"
           
-          className={`${loading ? 'disabled bg-[#0e1457]':' bg-[#020742]'} w-full p-3 text-white rounded text-base font-bold  hover:bg-[#0e1457]`}
+          className={`${loading ? 'disabled bg-[#0e1457]':'cursor-pointer bg-[#020742]'} w-full p-3 text-white rounded text-base font-bold  hover:bg-[#0e1457]`}
         >
           {loading ? 'Loading...' : 'Login'}
         </button>

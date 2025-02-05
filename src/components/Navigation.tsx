@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate} from 'react-router-dom';
 import { RootState } from '../types/types';
-import { setUserForm } from '../features/users';/* 
+import { setUserForm, setUserLogin } from '../features/users';/* 
 import axios from 'axios'; */
 import axios from 'axios';
 import { logOutApi } from '../api/api';
@@ -29,7 +29,7 @@ const logoutUser = () =>{
   .then(()=>{
  navigate('/');
  //here we can add success message
-   
+ dispatch(setUserLogin(false)) 
     
   }).catch(err=>console.log(err));
    
@@ -44,8 +44,8 @@ const logoutUser = () =>{
       <Link to={'/'} className='xl:text-4xl lg:text-3lx md:text-2xl text-[#020742] text-xl font-black '>Event Scheduler</Link>
       <div>
    {!login && <button onClick={userLoginForm} className=' bg-[#CDD1EA4D] text-Primary px-3 py-1 font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] lg:text-lg' >Login</button>}
-   <button onClick={logoutUser} className=' bg-[#CDD1EA4D] text-Primary px-3 py-1 font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] lg:text-lg' >Login Out</button>
-
+   {login && <button onClick={logoutUser} className=' bg-[#CDD1EA4D] text-Primary px-3 py-1 font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] lg:text-lg' >Login Out</button>
+}
       
       </div>
     </div>

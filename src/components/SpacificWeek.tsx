@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Event } from '../types/types';
 import axios from 'axios';
+import { setNewEvent } from '../features/events';
+import { useDispatch } from 'react-redux';
 
 const SapcificWeek = () => {
    
     const [starting, setStarting] = useState<string>('');
     const [ending, setEnding] = useState<string>('');
     const [selectedDate, setSelectedDate] = useState<Number[]>([])
+    const dispatch = useDispatch();
     const [inputs, setInputs] = useState<Event>({
         title:'',
         time:'',
@@ -64,33 +67,33 @@ const SapcificWeek = () => {
 
 
   return (
-    <div className='w-full px-10 py-5'>
-    <form className='shadow-md px-2 py-3 rounded-lg' onSubmit={handleSubmit}>
-        <table>
+    <div className='w-full mt-2'>
+    <form className='px-5' onSubmit={handleSubmit}>
+        <table  className="w-full">
             <tbody>
             <tr>
                 <td>
                     <label>Title : </label>
-                    <input name='title' onChange={handleChange} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
+                    <input name='title' onChange={handleChange} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
                 </td>
             </tr>
 
             <tr>
                 <td>
                     <label>Time : </label>
-                    <input type='time' name='time' onChange={handleChange} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
+                    <input type='time' name='time' onChange={handleChange} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
                 </td>
             </tr>
             <tr>
                 <td>
                     <label>Starting date : </label>
-                    <input onChange={(e)=>setStarting(e.target.value)} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
+                    <input onChange={(e)=>setStarting(e.target.value)} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
                 </td>
             </tr>
             <tr>
                 <td>
                     <label>Ending date : </label>
-                    <input onChange={(e)=>setEnding(e.target.value)} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
+                    <input onChange={(e)=>setEnding(e.target.value)} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
                 </td>
             </tr>
                 <tr>
@@ -133,15 +136,22 @@ const SapcificWeek = () => {
             <tr>
                 <td>
                     <label>description : </label>
-                    <textarea name='description' onChange={handleChange} placeholder='description...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
+                    <textarea name='description' onChange={handleChange} placeholder='description...' className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
                 </td>
             </tr>
-            <tr>
-                <td className='flex gap-5'>
-                    <button className='bg-submitBtn text-white px-8 py-1 rounded-md' type='submit'>Submit</button>
-                    <p className='bg-cancelBtn text-white px-4 py-1 rounded-md' >Cancel</p>
-                </td>
-            </tr>
+                <tr>
+                    <td className='flex gap-5'>
+                        <button className='bg-[#020740] text-white px-8 py-1 rounded-md hover:bg-[#020790]' type='submit'>
+                            Submit
+                        </button>
+                <p
+                  className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
+                  onClick={()=>dispatch(setNewEvent(false))}
+                >
+                  Cancel
+                </p>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </form>

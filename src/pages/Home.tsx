@@ -8,7 +8,8 @@ const Home:React.FC = () => {
   const dispatch = useDispatch();
 
   const userLoginForm = () => {
-   dispatch(setUserForm(true))  
+   dispatch(setUserForm(true));
+     
   
 
   }

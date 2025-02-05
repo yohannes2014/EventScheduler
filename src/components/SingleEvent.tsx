@@ -1,93 +1,189 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import {useSingleEvent} from '../hooks/useEvents';
-import { setNewEvent } from '../features/events';
+import { createEvent, setNewEvent } from '../features/events';
 import axios from 'axios';
 import { addEvent } from '../api/api';
 import { Event } from '../types/types';
+import { useSingle, useSingleError, useEvent } from '../hooks/useEvents';
+import { useDispatch } from 'react-redux';
+
 
 const SingleEvent: React.FC = () => {
-  
-  const {single, setSingle} = useSingleEvent(); 
+
+  const { single, setSingle} = useSingle();
+  const { error, setError} = useSingleError();
+  const { setEvents } = useEvent();
   const dispatch = useDispatch();
- 
-
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSingle({ ...single, [name]: value });
+
+    // Title validation
+    if (value === '') {
+      setError((prev) => ({ ...prev, title: "Please insert title" }));
+    } else {
+      setError((prev) => ({ ...prev, title: "" }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSingle({ ...single, [name]: value });
 
+    // Time validation
+    if (value === '') {
+      setError((prev) => ({ ...prev, time: "Please insert time" }));
+    } else {
+      setError((prev) => ({ ...prev, time: "" }));
+    }
+  };
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSingle({ ...single, [name]: value });
+
+    // Time validation
+    if (value === '') {
+      setError((prev) => ({ ...prev, date: "Please insert date" }));
+    } else {
+      setError((prev) => ({ ...prev, date: "" }));
+    }
+  };
+  const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setSingle({ ...single, [name]: value });
+
+    // Time validation
+    if (value === '') {
+      setError((prev) => ({ ...prev, description: "Please insert description" }));
+    } else {
+      setError((prev) => ({ ...prev, description: "" }));
+    }
+  };
+
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newEvent:Event = {
-      title:single.title,
+
+    // Title validation
+    if (single.title === "" && single.time === "" && single.date === "" && single.description === '') {
+      setError((prev) => ({ ...prev, title: 'Please insert title' }));
+      setError((prev) => ({ ...prev, time: 'Please insert time' }));
+      setError((prev) => ({ ...prev, date: 'Please insert date' }));
+      setError((prev) => ({ ...prev, description: 'Please insert description' }));
+      return;
+    }
+    else if (single.title === "") {
+      setError((prev) => ({ ...prev, title: 'Please insert title' }));
+      return;
+    }
+    else if ( single.time === "") {
+     
+      setError((prev) => ({ ...prev, time: 'Please insert time' }));
+
+      return;
+    }
+    else if (single.date === "" ) {
+     
+      setError((prev) => ({ ...prev, date: 'Please insert date' }));
+    
+      return;
+    }
+    else if ( single.description === '') {
+
+      setError((prev) => ({ ...prev, description: 'Please insert description' }));
+      return;
+    }
+
+    const newEvent: Event = {
+      title: single.title,
       time: single.time,
       description: single.description,
       date: single.date
-    }
+    };
 
+    // Add the new event to the events list
+    setEvents((prevEvents) => [...prevEvents, newEvent]);
 
-   axios.post(addEvent, newEvent)
-   .then(res=>console.log(res.data))
-   .catch(err=>console.log(err));
-   
-
-   
+    axios.post(addEvent, newEvent)
+      .then(res => {
+        dispatch(createEvent(res.data.event));
+        // Reset form after successful submission
+ 
+        
+        setSingle({
+          title: '',
+          time: '',
+          description: '',
+          date: ''
+        });
+      })
+      .catch(err => {
+        console.error('Error adding event:', err);
+      });
   };
 
   return (
-    <div className="w-full px-3 py-5">
+    <div className="w-full px-10 py-5">
       <form className="shadow-md px-2 py-3 rounded-lg" onSubmit={handleSubmit}>
         <table className="w-full">
           <tbody>
             <tr>
               <td>
-                <label>Title: </label>
+                <div className='flex justify-between'>
+                  <label>Title: </label>
+                  <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.title}</p>
+                </div>
                 <input
                   name="title"
                   className="border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1"
                   type="text"
                   placeholder="Title"
                   value={single.title}
-                  onChange={handleChange}
+                  onChange={handleTitle}
                 />
               </td>
             </tr>
             <tr>
               <td>
+                <div className='flex justify-between'>
                 <label>Date: </label>
+                  <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.date}</p>
+                </div>
                 <input
                   name="date"
                   className="border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1"
                   type="date"
                   value={single.date}
-                  onChange={handleChange}
+                  onChange={handleDate}
                 />
               </td>
             </tr>
             <tr>
               <td>
+                <div className='flex justify-between'>
                 <label>Time: </label>
+                  <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.time}</p>
+                </div>
                 <input
                   name="time"
                   className="border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1"
                   type="time"
                   value={single.time}
-                  onChange={handleChange}
+                  onChange={handleTime}
                 />
               </td>
             </tr>
             <tr>
               <td>
+                <div className='flex justify-between'>
                 <label>Description: </label>
+                  <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.description}</p>
+                </div>
                 <textarea
                   name="description"
                   placeholder="Description..."
                   className="border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1"
                   value={single.description}
-                  onChange={handleChange}
+                  onChange={handleDescription}
                 ></textarea>
               </td>
             </tr>
@@ -98,7 +194,7 @@ const SingleEvent: React.FC = () => {
                 </button>
                 <p
                   className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
-                  onClick={()=>dispatch(setNewEvent(false))}
+                  onClick={() => dispatch(setNewEvent(false))}
                 >
                   Cancel
                 </p>
@@ -112,4 +208,3 @@ const SingleEvent: React.FC = () => {
 };
 
 export default SingleEvent;
- 

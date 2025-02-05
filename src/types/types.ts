@@ -16,7 +16,7 @@ export interface UsersState {
 
 export interface EventsState {
     events: Event | null; 
-    selectedEvent:Event[]; 
+    selectedEvent:UserEvent[]; 
     selectedDate:String;
     isEvent: boolean;
     newEvent:boolean;
@@ -24,25 +24,27 @@ export interface EventsState {
     repeat:string;
     display:string;
     userEvent:UserEvent[];
-    singleEvent:UserEvent;
-    addCalender:boolean;
+    updateCalender:boolean; 
     AddnewEvent:Event;
+    selectEvent:UserEvent;
+    addCalanderEvent:boolean;
 }
 
 export interface RootState {
     events:{
         events: Event[];  
         isEvent: boolean;
-        selectedEvent:Event[];
+        selectedEvent:UserEvent[];
         selectedDate:string;
         newEvent:boolean;
         eventType:string;
         repeat:string;
         display:string;
         userEvent:UserEvent[];
-        singleEvent:UserEvent;
-        addCalender:boolean; 
+        updateCalender:boolean; 
         AddnewEvent:Event;
+        selectEvent:UserEvent;
+        addCalanderEvent:boolean;
      
     },
     users:{
@@ -119,6 +121,14 @@ export interface Event{
 
 export interface UserEvent extends Event{
     _id:string;
+}
+
+export interface Selected{
+    title:string;
+    description:string;
+    time:string;
+    date:string;
+    _id?:string
 }
 
 

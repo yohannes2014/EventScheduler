@@ -7,16 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
 import { setNotifiCard, setNotification, setNotifName } from '../features/users';
 import Notification from './Notification';
-import { setSelectedDate, setSelectedEvents } from '../features/events';
-import CalenderEventForm from './CalenderEventForm';
+import { setSelectedDate,setSelectedEvents } from '../features/events';
 
 const Calendar: React.FC = () => {
   const userEvent = useSelector((state: RootState) => state.events.userEvent);
   const notificationCard = useSelector((state:RootState)=>state.users.notifCard);
-  const AddEvent = useSelector((state:RootState)=>state.events.addCalender)
   
   const dispatch = useDispatch();
-  const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;  // Get the user's local time zone
 
@@ -58,6 +56,7 @@ const Calendar: React.FC = () => {
         dispatch(setNotifName('Event'));
         dispatch(setNotification('Event'));
         dispatch(setNotifiCard(true));
+
         dispatch(setSelectedEvents(eventOnDate))
         
       } else {
@@ -79,21 +78,19 @@ const Calendar: React.FC = () => {
 
   return (
     <>
-   {AddEvent && <div className='absolute bg-blue-400 rounded-lg'>
-      <CalenderEventForm />
-    </div>}
+
     
     {notificationCard && <Notification />}
       <div className="w-full p-2 border-[2px] border-niceback rounded-xl">
         <div className="bg-slate-200 flex items-center flex-col py-2">
           <p className="font-extrabold text-lg">{format(currentMonth, 'yyyy')}</p>
           <div className="flex justify-around w-[300px] items-center">
-            <FaChevronLeft onClick={handlePrevMonth} className="text-primary" />
+            <FaChevronLeft onClick={handlePrevMonth} className="text-blue-950 cursor-pointer text-3xl hover:text-blue-500" />
             <p>{format(currentMonth, 'MMMM')}</p>
-            <FaChevronRight onClick={handleNextMonth} className="text-primary" />
+            <FaChevronRight onClick={handleNextMonth} className="text-blue-950 cursor-pointer text-3xl hover:text-blue-500" />
           </div>
         </div>
-        <div className="flex justify-between mt-6 mb-6 w-full">
+        <div className="flex justify-between mt-6 mb-6 w-full px-15">
           {weekdays.map((day, i) => (
             <p key={i} className="bg-niceback px-2 text-primary">{day}</p>
           ))}

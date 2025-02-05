@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import RecInterval from './RecInterval'
-import SapcificWeek from './SapcificWeek'
+import SapcificWeek from './SpacificWeek'
 import RealtiveDate from './RealtiveDate'
 
 const ComplexRecEvent:React.FC = () => {
     const [complex, setComplex] = useState<string>('recInterval')
   return (
-    <div>
-      <div className='flex justify-between px-2 bg-blue-50'>
-        <p onClick={()=>setComplex('recInterval')} className='cursor-pointer hover:bg-yellow-200 px-3 rounded-md text-center'>Recurring Interval</p>
-        <p onClick={()=>setComplex('spacificWeek')} className='cursor-pointer hover:bg-yellow-200 px-3 rounded-md text-center'>Spacific Weekdays</p>
-        <p onClick={()=>setComplex('relativeDates')} className='cursor-pointer hover:bg-yellow-200 px-3 rounded-md text-center'>Relative Dates</p>
+    <div className="w-full">
+    <div className="bg-niceback flex w-full justify-around mt-3  border-b-2 border-blue-200 rounded-2xl " >
+        <p onClick={()=>setComplex('recInterval')} className={`${complex === "recInterval" && 'bg-blue-200'} px-5 rounded-md cursor-pointer  py-2`}>Recurring Interval</p>
+        <p onClick={()=>setComplex('spacificWeek')} className={`${complex === "spacificWeek" && 'bg-blue-200'} px-5 rounded-md cursor-pointer py-2`}>Spacific Weekdays</p>
+        <p onClick={()=>setComplex('relativeDates')} className={`${complex === "relativeDates" && 'bg-blue-200'} px-5 rounded-md cursor-pointer py-2`} >Relative Dates</p>
       </div>
       {complex === "recInterval" && <RecInterval />}
       {complex === "spacificWeek" && <SapcificWeek />}

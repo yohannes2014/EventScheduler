@@ -3,10 +3,12 @@ import { Event } from '../types/types'
 import { eachDayOfInterval, endOfMonth, startOfMonth } from 'date-fns';
 import axios from 'axios';
 import { addEvent } from '../api/api';
+import { setNewEvent } from '../features/events';
+import { useDispatch } from 'react-redux';
 
 const RealtiveDate = () => {
-   
-    
+
+    const dispatch = useDispatch();
     const [selectedDate, setSelectedDate] = useState<Number>(1);
     const [nthWeek, setNthWeek] = useState<string>('first')
     const [month, setMonth] = useState<number>(0)
@@ -16,7 +18,7 @@ const RealtiveDate = () => {
         time: '',
         date: '',
         description: ''
-    
+
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -66,42 +68,42 @@ const RealtiveDate = () => {
                 time: events.time,
                 date: formattedDate,
                 description: events.description
-                
+
             };
 
             // Send the event to the backend via POST request.
             axios.post(addEvent, event)
-            .then(res=>console.log(res.data))
-            .catch(err=>console.log(err));
-            
+                .then(res => console.log(res.data))
+                .catch(err => console.log(err));
+
         } else {
             console.log("No matching day found for the selected options.");
         }
     }
 
     return (
-        <div className='w-full px-10 py-5'>
-            <form className='shadow-md px-2 py-3 rounded-lg' onSubmit={handleSubmit}>
-                <table>
+        <div className='w-full mt-2'>
+            <form className='px-5' onSubmit={handleSubmit}>
+                <table className="w-full">
                     <tbody>
                         <tr>
                             <td>
                                 <label>Title : </label>
-                                <input name='title' onChange={handleChange} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
+                                <input name='title' onChange={handleChange} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
                             </td>
                         </tr>
 
                         <tr>
                             <td>
                                 <label>Time : </label>
-                                <input name='time' type='time' onChange={handleChange} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
+                                <input name='time' type='time' onChange={handleChange} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
                             </td>
                         </tr>
 
                         <tr>
                             <td>
                                 <label>Day : </label>
-                                <select onChange={(e) => setSelectedDate(Number(e.target.value))} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'>
+                                <select onChange={(e) => setSelectedDate(Number(e.target.value))} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'>
                                     <option value='1'>Monday</option>
                                     <option value='2'>Tuesday</option>
                                     <option value='3'>Wednesday</option>
@@ -115,7 +117,7 @@ const RealtiveDate = () => {
                         <tr>
                             <td>
                                 <label>Week : </label>
-                                <select onChange={(e) => setNthWeek(e.target.value)} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'>
+                                <select onChange={(e) => setNthWeek(e.target.value)} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'>
                                     <option value='first'>First</option>
                                     <option value='second'>Second</option>
                                     <option value='third'>Third</option>
@@ -126,7 +128,7 @@ const RealtiveDate = () => {
                         <tr>
                             <td>
                                 <label>Month : </label>
-                                <select onChange={(e) => setMonth(Number(e.target.value))} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'>
+                                <select onChange={(e) => setMonth(Number(e.target.value))} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'>
                                     <option value={0}>January</option>
                                     <option value={1}>February</option>
                                     <option value={2}>March</option>
@@ -145,19 +147,26 @@ const RealtiveDate = () => {
                         <tr>
                             <td>
                                 <label>Year : </label>
-                                <input name='time' type='number' onChange={(e) => setYear(Number(e.target.value))} className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
+                                <input name='time' type='number' onChange={(e) => setYear(Number(e.target.value))} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <label>Description : </label>
-                                <textarea name='description' onChange={handleChange} placeholder='description...' className='border-solid border-sky-100 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
+                                <textarea name='description' onChange={handleChange} placeholder='description...' className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
                             </td>
                         </tr>
                         <tr>
                             <td className='flex gap-5'>
-                                <button className='bg-submitBtn text-white px-8 py-1 rounded-md' type='submit'>Submit</button>
-                                <p className='bg-cancelBtn text-white px-4 py-1 rounded-md'>Cancel</p>
+                                <button className='bg-[#020740] text-white px-8 py-1 rounded-md hover:bg-[#020790]' type='submit'>
+                                    Submit
+                                </button>
+                                <p
+                                    className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
+                                    onClick={() => dispatch(setNewEvent(false))}
+                                >
+                                    Cancel
+                                </p>
                             </td>
                         </tr>
                     </tbody>

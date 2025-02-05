@@ -4,18 +4,40 @@ import { RootState } from '../types/types'
 import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { setNotifiCard } from '../features/users';
-import { setAddCalecder } from '../features/events';
+import { deleteEvent, setNewCalenderEvent, updateEvents } from '../features/events';
+import axios from 'axios';
 
 const Notification:React.FC = () => {
     const notification = useSelector((state:RootState)=>state.users.notification);
     const note = useSelector((state:RootState)=>state.users.notificationName);
     const selected = useSelector((state:RootState)=>state.events.selectedEvent);
-    const dispatich = useDispatch();
+    const dispatch = useDispatch();
+
     const handleAddNew = () => {
-      dispatich(setNotifiCard(false));
-      dispatich(setAddCalecder(true))
+      
+      dispatch(setNewCalenderEvent(true));
       
     }
+
+const handleDelete = (id:string) => {
+  axios.delete(`http://localhost:8000/api/events/${id}`)
+  .then(() => {
+    dispatch(deleteEvent(id))
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
+
+const handleUpdate = (e:string) => {
+  dispatch(updateEvents(true));
+  console.log(e)
+  
+}
+
+
+
+
   return (
     <div className='absolute w-[700px] rounded-Sxl bg-white shadow-blue-300 shadow-md'>
       <div className='w-full bg-blue-100 py-1 font-bold text-center text-blue-900'>Event Notification</div>
@@ -36,8 +58,8 @@ const Notification:React.FC = () => {
             
              </div>
              <div className='flex flex-col justify-around'>
-               <p title='Edit'><FaRegEdit className='text-gray-600 hover:text-gray-900 cursor-pointer font-bold text-2xl' /></p>
-               <p title='Delete' ><RiDeleteBin6Line className='text-red-600 hover:text-red-900 cursor-pointer font-bold text-2xl' /></p>
+               <p title='Edit' onClick={()=>handleUpdate(item._id)}><FaRegEdit className='text-gray-600 hover:text-gray-900 cursor-pointer font-bold text-2xl' /></p>
+               <p title='Delete' onClick={()=>handleDelete(item._id)} ><RiDeleteBin6Line className='text-red-600 hover:text-red-900 cursor-pointer font-bold text-2xl' /></p>
                </div> 
              
          </div>
@@ -52,7 +74,7 @@ const Notification:React.FC = () => {
 
       <div className='flex justify-center gap-5 py-2'>
         <button onClick={()=>handleAddNew()} className='px-6 bg-amber-300 rounded-md py-1 cursor-pointer'> Add </button>
-        <button onClick={()=>dispatich(setNotifiCard(false))} className='px-2 bg-amber-300 rounded-md py-1 cursor-pointer'> Cancel </button>
+        <button onClick={()=>dispatch(setNotifiCard(false))} className='px-2 bg-amber-300 rounded-md py-1 cursor-pointer'> Cancel </button>
       </div>
     </div>
   )

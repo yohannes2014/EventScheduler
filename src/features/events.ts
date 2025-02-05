@@ -1,14 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Event, EventsState, UserEvent } from "../types/types";
+import { Event,  EventsState,  UserEvent } from "../types/types";
 
-const event:UserEvent = {
-  _id:'',
-  title:'',
-  time:'',
-  date:'',
-  description:''
 
-}
 const newEvent:Event = {
 
   title:'',
@@ -17,20 +10,31 @@ const newEvent:Event = {
   description:''
 
 }
+const updateEvent:UserEvent = {
+
+  title:'',
+  time:'',
+  date:'',
+  description:'',
+  _id:''
+
+}
 
 const initialState:EventsState = {
       userEvent:[],
       selectedEvent:[],
       selectedDate:'',
       events: null,
-      addCalender:false,  
+      updateCalender:false, 
       isEvent:false,
       newEvent:false,
       eventType:'single',
       repeat:'daily',
       display:'list',
-      singleEvent:event,
       AddnewEvent:newEvent,
+      selectEvent:updateEvent,
+      addCalanderEvent:false,
+      
 }
 
 const eventsSlice = createSlice({
@@ -50,17 +54,22 @@ const eventsSlice = createSlice({
     setNewEvent(state, action:PayloadAction<boolean>){
       state.newEvent = action.payload
    },
+    setNewCalenderEvent(state, action:PayloadAction<boolean>){
+      state.addCalanderEvent = action.payload
+   },
    setAddNewEvent(state, action:PayloadAction<Event>){
   state.AddnewEvent = action.payload
    },
-   
-    setAddCalecder(state, action:PayloadAction<boolean>){
-      state.addCalender = action.payload
+   setSelectEvent(state, action:PayloadAction<UserEvent>){
+   state.selectEvent = action.payload;
+   },
+    updateEvents(state, action:PayloadAction<boolean>){
+      state.updateCalender = action.payload
    },
     setRepeatEvent(state, action:PayloadAction<string>){
       state.repeat = action.payload
    },
-  
+
    setUserEvents(state, action:PayloadAction<UserEvent[]>){
     state.userEvent = action.payload
    },
@@ -68,7 +77,7 @@ const eventsSlice = createSlice({
     state.selectedEvent = action.payload
    },
   
-   updateEvent(state, action: PayloadAction<UserEvent>) {
+   setUpdateEvent(state, action: PayloadAction<UserEvent>) {
     const index = state.userEvent.findIndex(event => event._id === action.payload._id);
     if (index !== -1) {
       state.userEvent[index] = action.payload;  
@@ -76,6 +85,14 @@ const eventsSlice = createSlice({
   },
   deleteEvent(state, action: PayloadAction<string>) {
     state.userEvent = state.userEvent.filter(event => event._id !== action.payload); 
+  },
+  
+  createEvent(state, action: PayloadAction<UserEvent>) {
+     state.userEvent.push(action.payload)
+  },
+  addMultipleEvent(state, action: PayloadAction<UserEvent[]>) {
+    state.userEvent = [...state.userEvent, ...action.payload];
+
   },
 
   
@@ -91,7 +108,12 @@ export const { setEventType,
                setSelectedDate,
                setEventDisplay, 
                setAddNewEvent,
-               updateEvent,
+               setUpdateEvent,
                deleteEvent,
-               setAddCalecder,
+               updateEvents,
+               setSelectEvent,
+               setNewCalenderEvent,
+               createEvent,
+               addMultipleEvent
+          
               } = eventsSlice.actions 

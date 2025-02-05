@@ -48,13 +48,13 @@ const date = new Date()
                 (<IoMdClose  onClick={dropdown} className='text-[30px] cursor-pointer font-bold  text-primary' />)}
                 </div>
 
-        {!menu && <div className={`text-center  block absolute w-full md:w-auto md:top-0 bg-[#d5d9e66a] backdrop-blur-[8px] top-[60px] gap-10 `}>
+        {!menu && <div className={`text-center md:hidden  block absolute w-full md:w-auto md:top-0 bg-[#d5d9e66a] backdrop-blur-[8px] top-[60px] gap-10 `}>
         <p onClick={listDisplay} className='cursor-pointer hover:shadow-md shadow-blue-200 py-1 rounded-xl px-2 md:font-semibold' >List of Events</p>
         <p onClick={calenderDisplay} className='cursor-pointer hover:shadow-md shadow-blue-200 py-1 rounded-xl px-2 md:font-semibold' >Calender</p>
         </div>}
-        <div className={`text-center top-30 hidden  md:flex flex-row lg:py-0 gap-y-2  ${menu ? ('my-[-500px]'):('my-[0px]')}`}>
-        <p onClick={listDisplay} className='cursor-pointer hover:shadow-md shadow-blue-200 py-1 rounded-xl px-2 font-semibold' >List of Events</p>
-        <p onClick={calenderDisplay} className='cursor-pointer hover:shadow-md shadow-blue-200 py-1 rounded-xl px-2 font-semibold' >Calender</p>
+        <div className={`text-center top-30 hidden  md:flex flex-row lg:py-0 gap-y-2 gap-5  ${menu ? ('my-[-500px]'):('my-[0px]')}`}>
+        <p onClick={listDisplay} className='cursor-pointer hover:shadow-[0px_2px_5px_rgba(0,0,100,0.2)] py-1 shadow-sm px-2 font-semibold' >List of Events</p>
+        <p onClick={calenderDisplay} className='cursor-pointer hover:shadow-[0px_2px_5px_rgba(0,0,100,0.2)] py-1 px-2 font-semibold shadow-sm' >Calender</p>
         </div> 
 
         <div className='flex gap-3 md:gap-5 px-3 items-center'>

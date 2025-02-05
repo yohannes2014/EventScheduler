@@ -1,36 +1,33 @@
+import { Event } from "../types/types";
 import { useState } from "react";
-import { Event} from "../types/types";
 
 
-
-
-export const useEvents = () => {
-  const [events, setEvents] = useState<Event[]>([]);
-return {events, setEvents}
-
-}
-/* Single Events */
 export const useSingle = () => {
-  
-
- const [single, setSingle] = useState<Event>({
+  const [single, setSingle] = useState<Event>({
     title: '',
     date: '',
     time: '',
     description: ''
-    
   });
- return {single, setSingle}
+
+  return { single, setSingle}
 }
 
-export const useSingleEvent = () => {
-  const { single, setSingle} = useSingle();
-  const { events, setEvents} = useEvents()
-  return { single, setSingle, events, setEvents}
+export const useSingleError = () => {
+  const [error, setError] = useState<Event>({
+    title: '',
+    date: '',
+    time: '',
+    description: ''
+  });
+
+ return { error, setError}
 }
 
+export const useEvent = () => {
+  const [events, setEvents] = useState<Event[]>([]);
 
+  return { events, setEvents}
+}  
 
-
-/* Standard Events */
 
