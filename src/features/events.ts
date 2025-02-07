@@ -122,7 +122,6 @@ export const { setEventType,
                setNewCalenderEvent,
                createEvent,
                addMultipleEvent,
-
                updateSelected,
                deleteSelected
           

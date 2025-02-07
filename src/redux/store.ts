@@ -18,4 +18,4 @@ const store = configureStore({
 
 
 
-export { store, persistor };
+export { store };
