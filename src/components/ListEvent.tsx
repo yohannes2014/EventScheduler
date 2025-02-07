@@ -13,6 +13,7 @@ const ListEvent: React.FC = () => {
   const dispatch = useDispatch()
 
 
+
   const handleDelete = (e: string) => {
 
     axios.delete(`http://localhost:8000/api/events/${e}`)
@@ -36,7 +37,7 @@ const ListEvent: React.FC = () => {
 
 
   return (
-    <div>
+    <div className='w-full'>
       {events.length === 0 &&
         <div className='mt-20'>
           <p className=' text-blue-950 font-black text-center lg:text-2xl md:text-lg text-2xl'> No events has found !!</p>
@@ -46,19 +47,19 @@ const ListEvent: React.FC = () => {
 
         </div>}
       {events.map((item, index) => (
-        <div className='flex flex-col gap-5 mt-5 ' key={index}>
+        <div className='flex flex-col gap-5 mt-5 w-[280px] 1xs:w-[380px] xs:w-[460px] sm:w-[550px] md:w-[700px] xl:w-[950px]' key={index}>
 
           <div>
-            <div className='w-[800px] mx-auto top-5 shadow-md flex justify-between px-2 rounded-md hover:shadow-lg '>
+            <div className='mx-auto top-5 shadow-md flex justify-between rounded-md hover:shadow-lg md:px-5 sm:px-3 px-1'>
               <div className='flex flex-col justify-around'>
-                <p><span className='font-medium text-primary'>title</span> : <span>{item.title}</span></p>
-                <p><span className='font-medium text-primary'>discription</span> : <span>{item.description}</span></p>
-                <p><span className='font-medium text-primary'>time</span> : <span>{item.time}</span> Date : {item.date}<span></span></p>
+                <p><span className='font-medium text-primary text-[12px] md:text-[16px] lg:text-[18px]'>title</span> : <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.title}</span></p>
+                <p><span className='font-medium text-primary text-[12px] md:text-[16px] lg:text-[18px]'>discription</span> : <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.description}</span></p>
+                <p><span className='font-medium text-primary text-[12px]  md:text-[16px] lg:text-[18px]'>time</span> : <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.time}</span> <span className='text-[12px] ml-3 md:text-[16px] lg:text-[18px]'>Date : {item.date}</span></p>
 
               </div>
               <div className='flex flex-col justify-around'>
-                <p title='Edit' onClick={() => handleUpdate(item)}><FaRegEdit className='text-gray-600 hover:text-gray-900 cursor-pointer font-bold text-2xl' /></p>
-                <p title='Delete' onClick={() => handleDelete(item._id)}><RiDeleteBin6Line className='text-red-600 hover:text-red-900 cursor-pointer font-bold text-2xl' /></p>
+                <p title='Edit' onClick={() => handleUpdate(item)}><FaRegEdit className='text-gray-600 hover:text-gray-900 cursor-pointer font-bold text-xl md:text-2xl' /></p>
+                <p title='Delete' onClick={() => handleDelete(item._id)}><RiDeleteBin6Line className='text-red-600 hover:text-red-900 cursor-pointer font-bold text-xl md:text-2xl' /></p>
               </div>
 
             </div>

@@ -1,85 +1,124 @@
 import React, { useState } from 'react'
 import { Event } from '../types/types'
-import { eachDayOfInterval, endOfMonth, startOfMonth } from 'date-fns';
+import { eachDayOfInterval, endOfMonth, startOfMonth, format } from 'date-fns';
 import axios from 'axios';
 import { addEvent } from '../api/api';
-import { setNewEvent } from '../features/events';
+import { createEvent, setNewEvent } from '../features/events';
 import { useDispatch } from 'react-redux';
+import { toZonedTime } from 'date-fns-tz';
 
 const RealtiveDate = () => {
 
     const dispatch = useDispatch();
-    const [selectedDate, setSelectedDate] = useState<Number>(1);
-    const [nthWeek, setNthWeek] = useState<string>('first')
-    const [month, setMonth] = useState<number>(0)
+    const [selectedDate, setSelectedDate] = useState<number>(0);
+    const [nthWeek, setNthWeek] = useState<string>('first');
+    const [month, setMonth] = useState<number>(0);
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [events, setEvents] = useState<Event>({
         title: '',
         time: '',
         date: '',
         description: ''
-
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const [error, setError] = useState({
+        title: '',
+        time: '',
+        year: '',
+        description: ''
+    });
+
+    const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setEvents({ ...events, [name]: value })
-    }
+        setEvents({ ...events, [name]: value });
+        setError((prev) => ({
+            ...prev,
+            title: value === '' ? 'Please enter title' : ''
+        }));
+    };
+
+    const handleTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setEvents({ ...events, [name]: value });
+        setError((prev) => ({
+            ...prev,
+            time: value === '' ? 'Please enter time' : ''
+        }));
+    };
+
+    const handleYear = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newYear = Number(e.target.value);
+        setYear(newYear);
+        setError((prev) => ({
+            ...prev,
+            year: newYear === 0 ? 'Please enter year' : newYear < 2025 ? 'Please enter valid year' : ''
+        }));
+    };
+
+    const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setEvents({ ...events, [name]: value });
+        setError((prev) => ({
+            ...prev,
+            description: value === '' ? 'Please enter description' : ''
+        }));
+    };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Ensure the selected month and year are valid.
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
         const startOfMonthDate = startOfMonth(new Date(year, month));
         const endOfMonthDate = endOfMonth(new Date(year, month));
 
-        // Get all days of the selected month and year.
         const daysOfMonth = eachDayOfInterval({
             start: startOfMonthDate,
             end: endOfMonthDate,
         });
 
-        // Filter for days that match the selected weekday (selectedDate).
+        // Validation
+        if (events.title === "" || events.time === "" || year === 0 || events.description === "") {
+            setError((prev) => ({
+                ...prev,
+                title: events.title === "" ? 'Please enter title' : prev.title,
+                time: events.time === "" ? 'Please enter time' : prev.time,
+                year: year === 0 ? 'Please enter year' : year < 2025 ? 'Please enter valid year' : prev.year,
+                description: events.description === "" ? 'Please enter event description' : prev.description,
+            }));
+            return;
+        }
+
         const matchingDays = daysOfMonth.filter((day: Date) => day.getDay() === selectedDate);
 
         let targetDay: Date | undefined;
 
-        // Handle week selection logic.
-        if (nthWeek === 'first' && matchingDays[0]) {
-            targetDay = matchingDays[0];
-        }
-        if (nthWeek === 'second' && matchingDays[1]) {
-            targetDay = matchingDays[1];
-        }
-        if (nthWeek === 'third' && matchingDays[2]) {
-            targetDay = matchingDays[2];
-        }
-        if (nthWeek === 'last' && matchingDays.length > 0) {
-            targetDay = matchingDays[matchingDays.length - 1];
-        }
+        if (nthWeek === 'first' && matchingDays[0]) targetDay = matchingDays[0];
+        if (nthWeek === 'second' && matchingDays[1]) targetDay = matchingDays[1];
+        if (nthWeek === 'third' && matchingDays[2]) targetDay = matchingDays[2];
+        if (nthWeek === 'last' && matchingDays.length > 0) targetDay = matchingDays[matchingDays.length - 1];
 
         if (targetDay) {
-            // Format the date correctly.
-            const formattedDate = targetDay.toISOString().split('T')[0];
+            const localTargetDay = toZonedTime(targetDay, timeZone);
+            const formattedDate = format(localTargetDay, 'yyyy-MM-dd');
 
-            // Create event object based on form values.
             const event: Event = {
                 title: events.title,
                 time: events.time,
                 date: formattedDate,
                 description: events.description
-
             };
 
-            // Send the event to the backend via POST request.
             axios.post(addEvent, event)
-                .then(res => console.log(res.data))
+                .then((res) => {
+                    dispatch(setNewEvent(false));
+                    dispatch(createEvent(res.data.event));
+                })
                 .catch(err => console.log(err));
-
         } else {
             console.log("No matching day found for the selected options.");
         }
-    }
+    };
 
     return (
         <div className='w-full mt-2'>
@@ -88,15 +127,21 @@ const RealtiveDate = () => {
                     <tbody>
                         <tr>
                             <td>
-                                <label>Title : </label>
-                                <input name='title' onChange={handleChange} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
+                                <div className='flex justify-between'>
+                                    <label>Title: </label>
+                                    <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.title}</p>
+                                </div>
+                                <input name='title' onChange={handleTitle} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='text' placeholder='title' />
                             </td>
                         </tr>
 
                         <tr>
                             <td>
-                                <label>Time : </label>
-                                <input name='time' type='time' onChange={handleChange} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
+                                <div className='flex justify-between'>
+                                    <label>Time : </label>
+                                    <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.time}</p>
+                                </div>
+                                <input name='time' type='time' onChange={handleTime} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
                             </td>
                         </tr>
 
@@ -104,13 +149,13 @@ const RealtiveDate = () => {
                             <td>
                                 <label>Day : </label>
                                 <select onChange={(e) => setSelectedDate(Number(e.target.value))} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'>
+                                    <option value='0'>Sunday</option>
                                     <option value='1'>Monday</option>
                                     <option value='2'>Tuesday</option>
                                     <option value='3'>Wednesday</option>
                                     <option value='4'>Thursday</option>
                                     <option value='5'>Friday</option>
                                     <option value='6'>Saturday</option>
-                                    <option value='0'>Sunday</option>
                                 </select>
                             </td>
                         </tr>
@@ -146,25 +191,28 @@ const RealtiveDate = () => {
                         </tr>
                         <tr>
                             <td>
-                                <label>Year : </label>
-                                <input name='time' type='number' onChange={(e) => setYear(Number(e.target.value))} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
+                                <div className='flex justify-between'>
+                                    <label>Year : </label>
+                                    <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.year}</p>
+                                </div>
+                                <input name='time' type='number' onChange={handleYear} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' />
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <label>Description : </label>
-                                <textarea name='description' onChange={handleChange} placeholder='description...' className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
+                                <div className='flex justify-between'>
+                                    <label>Description : </label>
+                                    <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.description}</p>
+                                </div>
+                                <textarea name='description' onChange={handleDescription} placeholder='description...' className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1'></textarea>
                             </td>
                         </tr>
                         <tr>
                             <td className='flex gap-5'>
-                                <button className='bg-[#020740] text-white px-8 py-1 rounded-md hover:bg-[#020790]' type='submit'>
+                                <button className='bg-[#020740] text-white px-8 py-1 cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
                                     Submit
                                 </button>
-                                <p
-                                    className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
-                                    onClick={() => dispatch(setNewEvent(false))}
-                                >
+                                <p className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400" onClick={() => dispatch(setNewEvent(false))}>
                                     Cancel
                                 </p>
                             </td>
@@ -176,4 +224,4 @@ const RealtiveDate = () => {
     )
 }
 
-export default RealtiveDate
+export default RealtiveDate;

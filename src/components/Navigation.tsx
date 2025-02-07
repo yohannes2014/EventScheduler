@@ -40,10 +40,10 @@ const logoutUser = () =>{
 
 
   return (
-    <div className='shadow-md z-2 h-[80px] lg:h-[90px] sticky top-0 flex justify-between px-5 py-a w-full items-center bg-white right-0 text-primary'>
+    <div className='shadow-md z-10 h-[80px] lg:h-[90px] sticky top-0 flex justify-between px-5 py-a w-full items-center bg-white right-0 text-primary'>
       <Link to={'/'} className='xl:text-4xl lg:text-3lx md:text-2xl text-[#020742] text-xl font-black '>Event Scheduler</Link>
       <div>
-   {!login && <button onClick={userLoginForm} className=' bg-[#CDD1EA4D] text-Primary px-3 py-1 font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] lg:text-lg' >Login</button>}
+   {!login && <button onClick={userLoginForm} className=' bg-[#CDD1EA4D] text-Primary px-3 py-[2px] lg:text-[18px] font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] text-[14px]' >Login</button>}
    {login && <button onClick={logoutUser} className=' bg-[#CDD1EA4D] text-Primary px-3 py-1 font-bold cursor-pointer rounded-md hover:bg-[#e8e9ed] lg:text-lg' >Login Out</button>
 }
       

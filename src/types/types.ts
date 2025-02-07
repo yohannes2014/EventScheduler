@@ -17,7 +17,7 @@ export interface UsersState {
 export interface EventsState {
     events: Event | null; 
     selectedEvent:UserEvent[]; 
-    selectedDate:String;
+    selectedDate:string;
     isEvent: boolean;
     newEvent:boolean;
     eventType:string;

@@ -1,10 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../types/types'
+import { RootState, UserEvent } from '../types/types'
 import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { setNotifiCard } from '../features/users';
-import { deleteEvent, setNewCalenderEvent, updateEvents } from '../features/events';
+import { deleteEvent, deleteSelected, setNewCalenderEvent, setSelectEvent, updateEvents } from '../features/events';
 import axios from 'axios';
 
 const Notification:React.FC = () => {
@@ -13,9 +13,13 @@ const Notification:React.FC = () => {
     const selected = useSelector((state:RootState)=>state.events.selectedEvent);
     const dispatch = useDispatch();
 
+
+
+
     const handleAddNew = () => {
       
       dispatch(setNewCalenderEvent(true));
+      dispatch(setNotifiCard(false));
       
     }
 
@@ -23,15 +27,17 @@ const handleDelete = (id:string) => {
   axios.delete(`http://localhost:8000/api/events/${id}`)
   .then(() => {
     dispatch(deleteEvent(id))
+    dispatch(deleteSelected(id))
+
   })
   .catch((err) => {
     console.log(err);
-  });
+  })
 }
 
-const handleUpdate = (e:string) => {
+const handleUpdate = (e:UserEvent) => {
   dispatch(updateEvents(true));
-  console.log(e)
+  dispatch(setSelectEvent(e))
   
 }
 
@@ -58,7 +64,7 @@ const handleUpdate = (e:string) => {
             
              </div>
              <div className='flex flex-col justify-around'>
-               <p title='Edit' onClick={()=>handleUpdate(item._id)}><FaRegEdit className='text-gray-600 hover:text-gray-900 cursor-pointer font-bold text-2xl' /></p>
+               <p title='Edit' onClick={()=>handleUpdate(item)}><FaRegEdit className='text-gray-600 hover:text-gray-900 cursor-pointer font-bold text-2xl' /></p>
                <p title='Delete' onClick={()=>handleDelete(item._id)} ><RiDeleteBin6Line className='text-red-600 hover:text-red-900 cursor-pointer font-bold text-2xl' /></p>
                </div> 
              

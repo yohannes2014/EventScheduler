@@ -1,6 +1,7 @@
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content: [
-    "./src/**/*.{ts,tsx}", // Adjust paths to match your files
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -18,7 +19,17 @@ module.exports = {
       backdropBlur: {
         myBlur: '4px', 
       },
+      screens: {
+        'xxs': '180px', 
+        '3xs': '300px', 
+        '2xs': '350px', 
+        '1xs': '400px', 
+        'xs': '480px', 
+
+        
+      },
     },
   },
   plugins: [],
 }
+

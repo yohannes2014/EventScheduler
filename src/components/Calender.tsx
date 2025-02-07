@@ -6,12 +6,12 @@ import { toZonedTime } from 'date-fns-tz';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
 import { setNotifiCard, setNotification, setNotifName } from '../features/users';
-import Notification from './Notification';
-import { setSelectedDate,setSelectedEvents } from '../features/events';
+
+import { setSelectedDate } from '../features/events';
 
 const Calendar: React.FC = () => {
   const userEvent = useSelector((state: RootState) => state.events.userEvent);
-  const notificationCard = useSelector((state:RootState)=>state.users.notifCard);
+  
   
   const dispatch = useDispatch();
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -48,7 +48,8 @@ const Calendar: React.FC = () => {
     const zonedDate = toZonedTime(date, timeZone); // Convert to local time
     const formattedDate = format(zonedDate, 'yyyy-MM-dd');
     dispatch(setSelectedDate(formattedDate));
-
+   
+          
     if (isCurrentMonth(date)) {
       const eventOnDate = userEvent.filter((event) => event.date === formattedDate);
    
@@ -56,8 +57,7 @@ const Calendar: React.FC = () => {
         dispatch(setNotifName('Event'));
         dispatch(setNotification('Event'));
         dispatch(setNotifiCard(true));
-
-        dispatch(setSelectedEvents(eventOnDate))
+    
         
       } else {
         dispatch(setNotifName('NoEvent'));
@@ -79,9 +79,7 @@ const Calendar: React.FC = () => {
   return (
     <>
 
-    
-    {notificationCard && <Notification />}
-      <div className="w-full p-2 border-[2px] border-niceback rounded-xl">
+      <div className=" 1xs:w-[400px] sm:w-[520px] md:w-[700px] lg:w-[1024px] p-2 border-[2px] border-niceback rounded-xl">
         <div className="bg-slate-200 flex items-center flex-col py-2">
           <p className="font-extrabold text-lg">{format(currentMonth, 'yyyy')}</p>
           <div className="flex justify-around w-[300px] items-center">
@@ -90,7 +88,7 @@ const Calendar: React.FC = () => {
             <FaChevronRight onClick={handleNextMonth} className="text-blue-950 cursor-pointer text-3xl hover:text-blue-500" />
           </div>
         </div>
-        <div className="flex justify-between mt-6 mb-6 w-full px-15">
+        <div className=" mt-5 grid grid-cols-7 gap-5 justify-items-center">
           {weekdays.map((day, i) => (
             <p key={i} className="bg-niceback px-2 text-primary">{day}</p>
           ))}

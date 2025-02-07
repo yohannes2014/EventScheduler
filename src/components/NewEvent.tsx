@@ -13,8 +13,8 @@ const NewEvent:React.FC = () => {
   
   return (
     <>
-{newEvent &&    <div className='fixed w-full h-full bg-[rgba(205, 209, 234, 0.681)] backdrop-blur-[4px] flex justify-center z-1'>
-          <div className='bg-white left-0 right-0 mt-30 w-[700px] shadow-blue-500 shadow-md px-3 p-5 rounded-3xl h-fit '>
+{newEvent &&    <div className='fixed w-full h-full z-10 bg-[rgba(205, 209, 234, 0.681)] backdrop-blur-[4px] flex justify-center z-1'>
+          <div className='bg-white left-0 right-0  w-[700px] shadow-blue-500 shadow-md px-3 p-5 rounded-3xl h-fit xxs:mt-[100px] '>
     
     <div className='flex justify-between gap-5 px-2 bg-slate-100 py-1 w-full m-auto'>
         <p onClick={()=>dispatch(setEventType('single'))} className={`text-center border-solid border-primary border-[1px]  py-1 md:px-2 px-1 text-primary cursor-pointer font-medium rounded-lg ${eventType === 'single' && 'bg-[#b0b4c384]'}`}> Single Occurrence</p>

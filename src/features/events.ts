@@ -49,7 +49,9 @@ const eventsSlice = createSlice({
       state.display = action.payload
    },
     setSelectedDate(state, action:PayloadAction<string>){
-      state.selectedDate = action.payload
+      state.selectedDate = action.payload,
+      state.selectedEvent = state.userEvent.filter(item => item.date === action.payload);
+    
    },
     setNewEvent(state, action:PayloadAction<boolean>){
       state.newEvent = action.payload
@@ -63,6 +65,16 @@ const eventsSlice = createSlice({
    setSelectEvent(state, action:PayloadAction<UserEvent>){
    state.selectEvent = action.payload;
    },
+   deleteSelected(state, action:PayloadAction<string>){
+    state.selectedEvent = state.selectedEvent.filter(event => event._id !== action.payload)
+},
+updateSelected(state, action:PayloadAction<UserEvent>){
+  const index = state.selectedEvent.findIndex(event => event._id === action.payload._id);
+  if (index !== -1) {
+    state.selectedEvent[index] = action.payload;  
+  }
+},
+
     updateEvents(state, action:PayloadAction<boolean>){
       state.updateCalender = action.payload
    },
@@ -73,10 +85,6 @@ const eventsSlice = createSlice({
    setUserEvents(state, action:PayloadAction<UserEvent[]>){
     state.userEvent = action.payload
    },
-   setSelectedEvents(state, action:PayloadAction<UserEvent[]>){
-    state.selectedEvent = action.payload
-   },
-  
    setUpdateEvent(state, action: PayloadAction<UserEvent>) {
     const index = state.userEvent.findIndex(event => event._id === action.payload._id);
     if (index !== -1) {
@@ -86,7 +94,7 @@ const eventsSlice = createSlice({
   deleteEvent(state, action: PayloadAction<string>) {
     state.userEvent = state.userEvent.filter(event => event._id !== action.payload); 
   },
-  
+ 
   createEvent(state, action: PayloadAction<UserEvent>) {
      state.userEvent.push(action.payload)
   },
@@ -104,7 +112,6 @@ export const { setEventType,
                setNewEvent, 
                setRepeatEvent, 
                setUserEvents, 
-               setSelectedEvents,
                setSelectedDate,
                setEventDisplay, 
                setAddNewEvent,
@@ -114,6 +121,9 @@ export const { setEventType,
                setSelectEvent,
                setNewCalenderEvent,
                createEvent,
-               addMultipleEvent
+               addMultipleEvent,
+
+               updateSelected,
+               deleteSelected
           
               } = eventsSlice.actions 

@@ -180,7 +180,8 @@ const DailyEvents = () => {
         axios
             .post("http://localhost:8000/api/events/multiple", newEvent)
             .then(res => {
-                dispatch(addMultipleEvent(res.data))
+                dispatch(addMultipleEvent(res.data));
+                dispatch(setNewEvent(false));
                
             })
             .catch(err => console.log(err));
@@ -293,7 +294,7 @@ const DailyEvents = () => {
                         </tr>
                         <tr>
                             <td className='flex gap-5'>
-                                <button className='bg-[#020740] text-white px-8 py-1 rounded-md hover:bg-[#020790]' type='submit'>
+                                <button className='bg-[#020740] text-white px-8 py-1  cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
                                     Submit
                                 </button>
                                 <p

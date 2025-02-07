@@ -9,7 +9,7 @@ export const loginApi = "http://localhost:8000/api/auth/login"
 export const logOutApi = "http://localhost:8000/api/auth/logout"
 
 //Add multiple Api
-export const addMultipleEvent = "http://localhost:8000/api/events/multiple"
+export const  multipeeventApi = "http://localhost:8000/api/events/multiple"
 
 //Add single event Api
 export const addEvent = "http://localhost:8000/api/events"

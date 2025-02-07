@@ -108,7 +108,7 @@ const SingleEvent: React.FC = () => {
         dispatch(createEvent(res.data.event));
         // Reset form after successful submission
  
-        
+         dispatch(setNewEvent(false))
         setSingle({
           title: '',
           time: '',
@@ -189,7 +189,7 @@ const SingleEvent: React.FC = () => {
             </tr>
             <tr>
               <td className="flex gap-5">
-                <button className="bg-[#020742] text-white px-8 py-1 rounded-md" type="submit">
+                <button className="bg-[#020742] text-white px-8 py-1  cursor-pointer rounded-md" type="submit">
                   Submit
                 </button>
                 <p
