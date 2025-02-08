@@ -70,9 +70,9 @@ const SignUpForm = () => {
     e.preventDefault();
 
     const validationErrors:SignupValidator = {
-      username: signUp.username ? '' : 'Name cannot be empty',
-      email: signUp.email ? '' : 'Email cannot be empty',
-      password: signUp.password ? '' : 'Password cannot be empty',
+      username: signUp.username ? '' : 'Name can not be empty',
+      email: signUp.email ? '' : 'Email can not be empty',
+      password: signUp.password ? '' : 'Password can not be empty',
       confirmPassword:
         signUp.confirmPassword === signUp.password ? '' : 'Passwords do not match',
     };

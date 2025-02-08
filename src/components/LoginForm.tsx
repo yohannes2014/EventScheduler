@@ -52,11 +52,11 @@ const LoginForm = () => {
     const newErrors = { email: '', password: '' };
 
     if (!login.email) {
-      newErrors.email = 'Email cannot be empty';
+      newErrors.email = 'Email can not be empty';
     }
 
     if (!login.password) {
-      newErrors.password = 'Password cannot be empty';
+      newErrors.password = 'Password can not be empty';
     }
 
     setErrors(newErrors);
