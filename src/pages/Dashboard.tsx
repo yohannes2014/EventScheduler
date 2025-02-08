@@ -22,14 +22,14 @@ const Dashboard: React.FC = () => {
   const update = useSelector((state: RootState) => state.events.updateCalender);
   const addNew = useSelector((state: RootState) => state.events.addCalanderEvent)
 
-  axios.defaults.withCredentials = true;
+
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
 
 
   useEffect(() => {
-    axios.get(UserSData)
+    axios.get(UserSData, withCredentials = true)
       .then((res) => {
         dispatch(getUser(res.data.userInfo));
         dispatch(setUserEvents(res.data.events))
