@@ -61,11 +61,11 @@ const LoginForm = () => {
 
     setErrors(newErrors);
 
-   axios.defaults.withCredentials = true;
+  
     // If no errors, proceed to login
     if (!newErrors.email && !newErrors.password) {
       dispatch(setLoginLoading(true))
-      axios.post(loginApi, login, )
+      axios.post(loginApi, login,{withCredentials : true})
       .then(res=>{
 
         
