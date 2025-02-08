@@ -27,7 +27,7 @@ const Home:React.FC = () => {
 </div>
   <div className='px-10 md:border-[#767cb4] md:border-l-2 md:w-[400px] lg:w-[600px]'>
     
-      <img src='src/assets/onecalendar.jpg' className=' rounded-md h-full w-full' alt='profile'/> 
+      <img src='/images/onecalendar.jpg' className=' rounded-md h-full w-full' alt='profile'/> 
   </div>
     
       </div>
