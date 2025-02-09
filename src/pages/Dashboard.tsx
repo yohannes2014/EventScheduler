@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
 
 
   useEffect(() => {
-    axios.get(UserSData, /* {withCredentials:true} */)
+    axios.get(UserSData, {withCredentials:true})
       .then((res) => {
         dispatch(getUser(res.data.userInfo));
         dispatch(setUserEvents(res.data.events))
