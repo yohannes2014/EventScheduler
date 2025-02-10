@@ -5,7 +5,6 @@ import ListEvent from '../components/ListEvent';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
 import axios from 'axios';
-import { UserSData } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from '../features/authe';
 import { setUserEvents } from '../features/events';
@@ -29,7 +28,7 @@ const Dashboard: React.FC = () => {
 
 
   useEffect(() => {
-    axios.get(UserSData, {withCredentials:true})
+    axios.get("http://localhost:8000/api/auth", {withCredentials:true})
       .then((res) => {
         dispatch(getUser(res.data.userInfo));
         dispatch(setUserEvents(res.data.events))

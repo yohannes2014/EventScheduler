@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLogin, useLoginError } from '../hooks/useUsers';
 import axios from 'axios';
-import { loginApi } from '../api/api';
 import { setLoginLoading, setUserForm } from '../features/users';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
@@ -65,7 +64,7 @@ const LoginForm = () => {
     // If no errors, proceed to login
     if (!newErrors.email && !newErrors.password) {
       dispatch(setLoginLoading(true))
-      axios.post(loginApi, login,{withCredentials : true})
+      axios.post("http://localhost:8000/api/auth/login", login,{withCredentials : true})
       .then(res=>{
 
         
