@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
 import { setMessage } from '../features/authe';
 import { useNavigate } from 'react-router-dom';
-import { loginApi } from '../api/api';
-
 
 const LoginForm = () => {
   
@@ -64,7 +62,7 @@ const LoginForm = () => {
     // If no errors, proceed to login
     if (!newErrors.email && !newErrors.password) {
       dispatch(setLoginLoading(true))
-      axios.post(loginApi, login)
+      axios.post("https://eventscaduleserver.onrender.com/api/auth/login", login)
       .then(res=>{
            
         
