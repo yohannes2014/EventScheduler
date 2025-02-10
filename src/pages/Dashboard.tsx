@@ -26,6 +26,13 @@ const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    if(!token){
+      navigate('/')
+    }
+  },[])
+
     
   useEffect(() => {
     const token = localStorage.getItem("token");
