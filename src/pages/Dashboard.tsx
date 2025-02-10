@@ -4,7 +4,7 @@ import Calender from '../components/Calender';
 import ListEvent from '../components/ListEvent';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
-
+import { UserSData } from '../api/api'
 import Notification from '../components/Notification';
 import EventsHandle from '../components/EventsHandle';
 import AddNewEvent from '../components/AddNewEvent';
@@ -26,22 +26,6 @@ const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-
-/*   useEffect(() => {
-    axios.get("http://localhost:8000/api/auth")
-      .then((res) => {
-        dispatch(getUser(res.data.userInfo));
-        dispatch(setUserEvents(res.data.events))
-        dispatch(setUserLogin(true))
-
-
-      }).catch(() => {
-
-        return navigate('/')
-
-      })
-  }) */
     
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -50,7 +34,7 @@ const Dashboard: React.FC = () => {
       axios.defaults.headers["Authorization"] = `Bearer ${token}`;
       
       axios
-        .get("http://localhost:8000/api/auth")
+        .get(UserSData)
         .then((res) => {
           dispatch(getUser(res.data.userInfo));
           dispatch(setUserEvents(res.data.events));
@@ -61,7 +45,7 @@ const Dashboard: React.FC = () => {
           navigate("/");
         });
     } else {
-      navigate("/"); // Optional: redirect if no token is present
+      navigate("/"); 
     }
   }, [dispatch, navigate]);
 
