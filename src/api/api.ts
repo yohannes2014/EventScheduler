@@ -1,4 +1,6 @@
 //API
+
+/* https://eventscaduleserver.onrender.com */
 //Signup Api
 export const signUpApi =  "https://eventscaduleserver.onrender.com/api/auth/register"
 

@@ -4,8 +4,9 @@ import axios from 'axios';
 import { setLoginLoading, setUserForm } from '../features/users';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
-import { useNavigate } from 'react-router-dom';
 import { setMessage } from '../features/authe';
+import { useNavigate } from 'react-router-dom';
+import { loginApi } from '../api/api';
 
 
 const LoginForm = () => {
@@ -15,8 +16,7 @@ const LoginForm = () => {
   const loading = useSelector((state:RootState)=>state.users.loginload);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-
+ 
  
   // Handle email change with validation
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,23 +64,25 @@ const LoginForm = () => {
     // If no errors, proceed to login
     if (!newErrors.email && !newErrors.password) {
       dispatch(setLoginLoading(true))
-      axios.post("https://eventscaduleserver.onrender.com/api/auth/login", login,{withCredentials : true})
+      axios.post(loginApi, login)
       .then(res=>{
-
+           
         
-        if(res.data.login){
+    if(res.data.login){
           dispatch(setMessage(res.data.message));
-          dispatch(setUserForm(false))
-         
-         navigate('/dashboard'); 
+          dispatch(setUserForm(false));
+          localStorage.setItem('token', res.data.token);
+          navigate('/dashboard'); 
+       
           
         }
 
-        dispatch(setMessage(res.data.message))
+        dispatch(setMessage(res.data.message)) 
      
       })
       .catch(err=>{
         dispatch(setMessage(err.message))
+        console.log(err)
        
         
       })

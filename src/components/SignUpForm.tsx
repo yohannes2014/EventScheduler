@@ -97,9 +97,11 @@ axios.post(signUpApi, newUser)
   dispatch(setMessage(res.data));
   dispatch(setForm('login'))
 
- }
+
+ };
  
- dispatch(setMessage(res.data));
+dispatch(setMessage(res.data))
+
 
 })
 .catch(err=>(dispatch(setMessage(err.message))))

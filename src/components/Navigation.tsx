@@ -27,6 +27,7 @@ const logoutUser = () =>{
 
   axios.post(logOutApi)
   .then(()=>{
+ localStorage.removeItem('token');
  navigate('/');
  //here we can add success message
  dispatch(setUserLogin(false)) 

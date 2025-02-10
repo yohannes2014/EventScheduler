@@ -4,13 +4,14 @@ import Calender from '../components/Calender';
 import ListEvent from '../components/ListEvent';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../types/types';
+
+import Notification from '../components/Notification';
+import EventsHandle from '../components/EventsHandle';
+import AddNewEvent from '../components/AddNewEvent';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from '../features/authe';
 import { setUserEvents } from '../features/events';
-import Notification from '../components/Notification';
-import EventsHandle from '../components/EventsHandle';
-import AddNewEvent from '../components/AddNewEvent';
 import { setUserLogin } from '../features/users';
 
 
@@ -19,16 +20,16 @@ const Dashboard: React.FC = () => {
   const display = useSelector((state: RootState) => state.events.display);
   const notification = useSelector((state: RootState) => state.users.notifCard);
   const update = useSelector((state: RootState) => state.events.updateCalender);
-  const addNew = useSelector((state: RootState) => state.events.addCalanderEvent)
+  const addNew = useSelector((state: RootState) => state.events.addCalanderEvent);
 
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
 
 
-  useEffect(() => {
-    axios.get("https://eventscaduleserver.onrender.com/api/auth", {withCredentials:true})
+/*   useEffect(() => {
+    axios.get("http://localhost:8000/api/auth")
       .then((res) => {
         dispatch(getUser(res.data.userInfo));
         dispatch(setUserEvents(res.data.events))
@@ -40,9 +41,29 @@ const Dashboard: React.FC = () => {
         return navigate('/')
 
       })
-  })
-
-
+  }) */
+    
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Set axios default authorization header
+      axios.defaults.headers["Authorization"] = `Bearer ${token}`;
+      
+      axios
+        .get("http://localhost:8000/api/auth")
+        .then((res) => {
+          dispatch(getUser(res.data.userInfo));
+          dispatch(setUserEvents(res.data.events));
+          dispatch(setUserLogin(true));
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+          navigate("/");
+        });
+    } else {
+      navigate("/"); // Optional: redirect if no token is present
+    }
+  }, [dispatch, navigate]);
 
   return (
 
