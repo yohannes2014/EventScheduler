@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
 
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/auth", {withCredentials:true})
+    axios.get("https://eventscaduleserver.onrender.com/api/auth", {withCredentials:true})
       .then((res) => {
         dispatch(getUser(res.data.userInfo));
         dispatch(setUserEvents(res.data.events))

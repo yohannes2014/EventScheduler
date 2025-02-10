@@ -64,7 +64,7 @@ const LoginForm = () => {
     // If no errors, proceed to login
     if (!newErrors.email && !newErrors.password) {
       dispatch(setLoginLoading(true))
-      axios.post("http://localhost:8000/api/auth/login", login,{withCredentials : true})
+      axios.post("https://eventscaduleserver.onrender.com/api/auth/login", login,{withCredentials : true})
       .then(res=>{
 
         
