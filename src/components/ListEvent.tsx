@@ -52,9 +52,9 @@ const ListEvent: React.FC = () => {
           <div>
             <div className='mx-auto top-5 shadow-md flex justify-between rounded-md hover:shadow-lg md:px-5 sm:px-3 px-1'>
               <div className='flex flex-col justify-around'>
-                <p><span className='font-medium text-primary text-[12px] md:text-[16px] lg:text-[18px]'>title</span> : <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.title}</span></p>
-                <p><span className='font-medium text-primary text-[12px] md:text-[16px] lg:text-[18px]'>discription</span> : <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.description}</span></p>
-                <p><span className='font-medium text-primary text-[12px]  md:text-[16px] lg:text-[18px]'>time</span> : <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.time}</span> <span className='text-[12px] ml-3 md:text-[16px] lg:text-[18px]'>Date : {item.date}</span></p>
+                <p><span className='font-medium text-primary text-[12px] md:text-[16px] lg:text-[18px]'>Title</span>: <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.title}</span></p>
+                <p><span className='font-medium text-primary text-[12px] md:text-[16px] lg:text-[18px]'>Discription</span>: <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.description}</span></p>
+                <p><span className='font-medium text-primary text-[12px]  md:text-[16px] lg:text-[18px]'>Time</span>: <span className='text-[12px] md:text-[16px] lg:text-[18px]'>{item.time}</span> <span className='text-[12px] ml-3 md:text-[16px] lg:text-[18px]'>Date: {item.date}</span></p>
 
               </div>
               <div className='flex flex-col justify-around'>

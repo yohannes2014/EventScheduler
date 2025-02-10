@@ -45,7 +45,7 @@ const handleUpdate = (e:UserEvent) => {
 
 
   return (
-    <div className='absolute w-[700px] rounded-Sxl bg-white shadow-blue-300 shadow-md'>
+    <div className='absolute xxs:w-[280px] 1xs:w-[350px] md:w-[500px] lg:w-[700px] rounded-Sxl bg-white shadow-blue-300 shadow-md'>
       <div className='w-full bg-blue-100 py-1 font-bold text-center text-blue-900'>Event Notification</div>
       {note === 'NoEvent' && <div className='flex justify-center h-[70px] items-center'>
         <p className='font-black'>{notification}</p>
