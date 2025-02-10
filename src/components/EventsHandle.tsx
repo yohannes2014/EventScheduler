@@ -135,7 +135,7 @@ else{
   return (
     <div className="w-full px-10 py-5 ">
       <p className='text-center font-bold text-blue-950'>Update Event</p>
-      <form className="shadow-md px-2 py-3 rounded-lg" onSubmit={handleSubmit}>
+      <form className="px-2 py-3 rounded-lg" onSubmit={handleSubmit}>
         <table className="w-full">
           <tbody>
             <tr>
