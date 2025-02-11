@@ -14,7 +14,7 @@ const AddNewEvent: React.FC = () => {
   const [input, setInput] = useState<Event>({
     title: '',
     time: '',
-    date: '',
+    date: selectedDate,
     description: ''
   });
 
@@ -77,11 +77,10 @@ const AddNewEvent: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (input.time === "" && input.date === "" && input.description === "" && input.title === "") {
+    if (input.time === "" && input.description === "" && input.title === "") {
 
       setError((pre) => ({ ...pre, time: "Please enter time" }));
       setError((pre) => ({ ...pre, title: "Please enter title" }));
-      setError((pre) => ({ ...pre, date: "Please enter date" }));
       setError((pre) => ({ ...pre, description: "Please enter description" }));
       return
     }
@@ -93,10 +92,7 @@ const AddNewEvent: React.FC = () => {
       setError((pre) => ({ ...pre, title: "Please enter title" }));
       return
     }
-    else if (input.date === "") {
-      setError((pre) => ({ ...pre, date: "Please enter date" }));
-      return
-    }
+  
     else if (input.description === "") {
       setError((pre) => ({ ...pre, description: "Please enter description" }));
       return
