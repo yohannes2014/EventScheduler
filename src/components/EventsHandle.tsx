@@ -133,7 +133,7 @@ else{
 
 
   return (
-    <div className="w-full px-10 py-5 ">
+    <div className="lg:w-[600px] md:w-[450px] sm:w-[400px] 1xs:w-[350px] px-10 py-5 ">
       <p className='text-center font-bold text-blue-950'>Update Event</p>
       <form className="px-2 py-3 rounded-lg" onSubmit={handleSubmit}>
         <table className="w-full">
