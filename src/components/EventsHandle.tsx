@@ -105,7 +105,7 @@ else if(input.description===""){
   return
 }
 else{
-  dispatch(loadingEvents(false));
+  dispatch(loadingEvents(true));
     const updatedEvent = {
       _id: selected?._id,
       title: input.title,
