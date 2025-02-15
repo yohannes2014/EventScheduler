@@ -1,14 +1,14 @@
 import React from 'react';
-import { createEvent, setNewEvent } from '../features/events';
+import { createEvent, loadingEvents, setNewEvent } from '../features/events';
 import axios from 'axios';
-import { Event } from '../types/types';
+import { Event, RootState } from '../types/types';
 import { useSingle, useSingleError, useEvent } from '../hooks/useEvents';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userEventsApi } from '../api/api';
 
 
 const SingleEvent: React.FC = () => {
-
+  const loading = useSelector((state:RootState)=>state.events.loading)
   const { single, setSingle} = useSingle();
   const { error, setError} = useSingleError();
   const { setEvents } = useEvent();
@@ -62,6 +62,7 @@ const SingleEvent: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  
 
     // Title validation
     if (single.title === "" && single.time === "" && single.date === "" && single.description === '') {
@@ -92,7 +93,7 @@ const SingleEvent: React.FC = () => {
       setError((prev) => ({ ...prev, description: 'Please insert description' }));
       return;
     }
-
+    dispatch(loadingEvents(true))
     const newEvent: Event = {
       title: single.title,
       time: single.time,
@@ -106,6 +107,9 @@ const SingleEvent: React.FC = () => {
     axios.post(userEventsApi, newEvent)
       .then(res => {
         dispatch(createEvent(res.data.event));
+      //loading
+      dispatch(loadingEvents(false))
+
         // Reset form after successful submission
  
          dispatch(setNewEvent(false))
@@ -189,8 +193,8 @@ const SingleEvent: React.FC = () => {
             </tr>
             <tr>
               <td className="flex gap-5">
-                <button className="bg-[#020742] text-white px-8 py-1  cursor-pointer rounded-md" type="submit">
-                  Submit
+                <button className={`bg-[#020742] text-white px-8 py-1  cursor-pointer rounded-md`} type="submit">
+                 {loading ? 'Loading' : 'Submit'}
                 </button>
                 <p
                   className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"

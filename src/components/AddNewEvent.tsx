@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Event } from '../types/types';
-import { createEvent, setNewCalenderEvent, setNewEvent } from '../features/events';
+import { createEvent, loadingEvents, setNewCalenderEvent, setNewEvent } from '../features/events';
 import axios from 'axios';
 import {  userEventsApi } from '../api/api';
 import { RootState } from '../types/types';
@@ -10,7 +10,8 @@ import { RootState } from '../types/types';
 
 const AddNewEvent: React.FC = () => {
   const dispatch = useDispatch();
-  const selectedDate = useSelector((state: RootState) => state.events.selectedDate)
+  const selectedDate = useSelector((state: RootState) => state.events.selectedDate);
+  const loading = useSelector((state:RootState)=>state.events.loading)
   const [input, setInput] = useState<Event>({
     title: '',
     time: '',
@@ -98,6 +99,7 @@ const AddNewEvent: React.FC = () => {
       return
     }
     else {
+      dispatch(loadingEvents(true));
       const newEvent = {
 
         title: input.title,
@@ -112,7 +114,7 @@ const AddNewEvent: React.FC = () => {
           // Reset form after successful submission
 
           dispatch(setNewEvent(false));
-
+          dispatch(loadingEvents(false));
           dispatch(setNewCalenderEvent(false))
         })
         .catch(err => {
@@ -205,9 +207,9 @@ const AddNewEvent: React.FC = () => {
             </tr>
             <tr>
               <td className="flex gap-5">
-                <button className="bg-[#020742] text-white px-8 py-1 rounded-md" type="submit">
-                  Submit
-                </button>
+              <button className='bg-[#020740] text-white px-8 py-1 cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
+                          {loading ? "Loading..." : "Submit"}
+              </button>
                 <p
                   className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
                   onClick={handleCancel}

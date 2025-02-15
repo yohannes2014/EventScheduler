@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Event } from '../types/types';
 import axios from 'axios';
-import { addMultipleEvent, setNewEvent } from '../features/events';
+import { addMultipleEvent, loadingEvents, setNewEvent } from '../features/events';
 import { useDispatch } from 'react-redux';
 import { multipeeventApi } from '../api/api';
 
@@ -107,6 +107,7 @@ const RecInterval = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
 
     const newEvent: Event[] = [];
     const start = new Date(single.starting);
@@ -162,7 +163,7 @@ const RecInterval = () => {
   }
 else{
     // Loop through dates using a for loop
-
+    dispatch(loadingEvents(true))
     if (repeatType === 'days') {
       for (let nextRepeat = start; nextRepeat <= end; nextRepeat.setDate(nextRepeat.getDate() + repeatEvery)) {
         const item: Event = {
@@ -204,6 +205,7 @@ else{
       .then(res => {
         dispatch(addMultipleEvent(res.data));
        dispatch(setNewEvent(false));
+       dispatch(loadingEvents(false))
        
       })
       .catch(err => console.log(err))

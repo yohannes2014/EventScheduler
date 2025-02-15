@@ -1,8 +1,8 @@
-import { Event } from "../types/types";
+import { Event, RootState } from "../types/types";
 import { useState } from "react";
 import axios from "axios";
-import { addMultipleEvent, setNewEvent } from "../features/events";
-import { useDispatch } from "react-redux";
+import { addMultipleEvent, loadingEvents, setNewEvent } from "../features/events";
+import { useDispatch, useSelector } from "react-redux";
 import { useSingle  } from "../hooks/useEvents";
 import { multipeeventApi } from "../api/api";
 
@@ -12,6 +12,7 @@ const DailyEvents = () => {
     const [rangeType, setRangeType] = useState<string>('days');
     const dispatch = useDispatch();
     const { single, setSingle } = useSingle();
+    const loading = useSelector((state:RootState)=>state.events.loading)
     const [error, setError] = useState({
         title: '',
         interval: '',
@@ -125,7 +126,7 @@ const DailyEvents = () => {
             return;
         }
         else{
-
+           dispatch(loadingEvents(true));
         if (rangeType === "days") {
             for (let i = 1; i <= range; i++) {
                 nextRepeat.setDate(nextRepeat.getDate() + 1);
@@ -183,7 +184,7 @@ const DailyEvents = () => {
             .then(res => {
                 dispatch(addMultipleEvent(res.data));
                 dispatch(setNewEvent(false));
-               
+                dispatch(loadingEvents(false));
             })
             .catch(err => console.log(err));
             setSingle({
@@ -295,9 +296,9 @@ const DailyEvents = () => {
                         </tr>
                         <tr>
                             <td className='flex gap-5'>
-                                <button className='bg-[#020740] text-white px-8 py-1  cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
-                                    Submit
-                                </button>
+                            <button className='bg-[#020740] text-white px-8 py-1 cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
+                          {loading ? "Loading..." : "Submit"}
+                        </button>
                                 <p
                                     className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
                                     onClick={() => dispatch(setNewEvent(false))}

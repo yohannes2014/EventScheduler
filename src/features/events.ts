@@ -34,6 +34,7 @@ const initialState:EventsState = {
       AddnewEvent:newEvent,
       selectEvent:updateEvent,
       addCalanderEvent:false,
+      loading:false
       
 }
 
@@ -102,6 +103,10 @@ updateSelected(state, action:PayloadAction<UserEvent>){
     state.userEvent = [...state.userEvent, ...action.payload];
 
   },
+  loadingEvents(state, action: PayloadAction<boolean>) {
+    state.loading = action.payload;
+
+  },
 
   
     }
@@ -123,6 +128,7 @@ export const { setEventType,
                createEvent,
                addMultipleEvent,
                updateSelected,
-               deleteSelected
+               deleteSelected,
+               loadingEvents
           
               } = eventsSlice.actions 

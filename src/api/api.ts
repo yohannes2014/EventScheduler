@@ -1,7 +1,7 @@
 //API
 
 //cloude Api
- const rootApi = "https://eventscaduleserver.onrender.com"
+const rootApi = "https://eventscaduleserver.onrender.com"
  //local Api
 //const rootApi = "http://localhost:8000"
 

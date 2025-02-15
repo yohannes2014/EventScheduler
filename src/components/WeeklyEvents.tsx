@@ -1,10 +1,11 @@
-import {  Event} from "../types/types";
+import {  Event, RootState} from "../types/types";
 import { useState } from "react";
 import axios from "axios";
-import { addMultipleEvent, setNewEvent } from "../features/events";
-import { useDispatch } from "react-redux";
+import { addMultipleEvent, loadingEvents, setNewEvent } from "../features/events";
+import { useDispatch, useSelector } from "react-redux";
 import { useSingle } from "../hooks/useEvents";
 import { multipeeventApi } from "../api/api";
+
 
 const WeeklyEvents = () => {
   const [range, setRange] = useState<number>(0);
@@ -19,7 +20,7 @@ const WeeklyEvents = () => {
         startingDate:'',
       });
     
-
+const loading = useSelector((state:RootState)=>state.events.loading)
 
     // handle title change
     const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +125,7 @@ const WeeklyEvents = () => {
         return;
     }
 else{
-
+    dispatch(loadingEvents(true));
 
           if (rangeType === "weeks") {
               for (let i = 1; i <= range; i++) {
@@ -171,7 +172,8 @@ else{
           .post(multipeeventApi, newEvent)
           .then(res => {
               dispatch(addMultipleEvent(res.data));
-               dispatch(setNewEvent(false))
+               dispatch(setNewEvent(false));
+               dispatch(loadingEvents(false));
              
           })
           .catch(err => console.log(err))
@@ -284,7 +286,7 @@ else{
                 <tr>
                     <td className='flex gap-5'>
                         <button className='bg-[#020740] text-white px-8 py-1 cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
-                            Submit
+                          {loading ? "Loading..." : "Submit"}
                         </button>
                         <p
                             className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"

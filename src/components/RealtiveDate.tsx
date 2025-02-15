@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import { Event } from '../types/types'
+import { Event, RootState } from '../types/types'
 import { eachDayOfInterval, endOfMonth, startOfMonth, format } from 'date-fns';
 import axios from 'axios';
-import { createEvent, setNewEvent } from '../features/events';
-import { useDispatch } from 'react-redux';
+import { createEvent, loadingEvents, setNewEvent } from '../features/events';
+import { useDispatch, useSelector } from 'react-redux';
 import { toZonedTime } from 'date-fns-tz';
 import { userEventsApi } from '../api/api';
 
 const RealtiveDate = () => {
 
     const dispatch = useDispatch();
+    const loading = useSelector((state:RootState)=>state.events.loading)
     const [selectedDate, setSelectedDate] = useState<number>(0);
     const [nthWeek, setNthWeek] = useState<string>('first');
     const [month, setMonth] = useState<number>(0);
@@ -88,7 +89,7 @@ const RealtiveDate = () => {
             }));
             return;
         }
-
+        dispatch(loadingEvents(true))
         const matchingDays = daysOfMonth.filter((day: Date) => day.getDay() === selectedDate);
 
         let targetDay: Date | undefined;
@@ -113,6 +114,7 @@ const RealtiveDate = () => {
                 .then((res) => {
                     dispatch(setNewEvent(false));
                     dispatch(createEvent(res.data.event));
+                    dispatch(loadingEvents(true))
                 })
                 .catch(err => console.log(err));
         } else {
@@ -209,9 +211,9 @@ const RealtiveDate = () => {
                         </tr>
                         <tr>
                             <td className='flex gap-5'>
-                                <button className='bg-[#020740] text-white px-8 py-1 cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
-                                    Submit
-                                </button>
+                            <button className='bg-[#020740] text-white px-8 py-1 cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
+                          {loading ? "Loading..." : "Submit"}
+                        </button>
                                 <p className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400" onClick={() => dispatch(setNewEvent(false))}>
                                     Cancel
                                 </p>

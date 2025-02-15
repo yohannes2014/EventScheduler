@@ -28,6 +28,7 @@ export interface EventsState {
     AddnewEvent:Event;
     selectEvent:UserEvent;
     addCalanderEvent:boolean;
+    loading:boolean;
 }
 
 export interface RootState {
@@ -45,6 +46,7 @@ export interface RootState {
         AddnewEvent:Event;
         selectEvent:UserEvent;
         addCalanderEvent:boolean;
+        loading:boolean;
      
     },
     users:{
