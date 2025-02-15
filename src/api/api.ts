@@ -1,32 +1,32 @@
 //API
 
-/* https://eventscaduleserver.onrender.com */
+//cloude Api
+const rootApi = "https://eventscaduleserver.onrender.com"
+ //local Api
+//const rootApi = "http://localhost:8000"
+
+
+const authApi = `${rootApi}/api/auth`
+const eventsApi = `${rootApi}/api/events`
+
 //Signup Api
-export const signUpApi =  "https://eventscaduleserver.onrender.com/api/auth/register"
+export const signUpApi =  `${authApi}/register`
 
 //Login Api
-export const loginApi =  "https://eventscaduleserver.onrender.com/api/auth/login"
+export const loginApi =  `${authApi}/login`
 
 //Logout Api
-export const logOutApi = "https://eventscaduleserver.onrender.com/api/auth/logout"
+export const logOutApi = `${authApi}/logout`
 
 //Add multiple Api
-export const  multipeeventApi = "https://eventscaduleserver.onrender.com/api/events/multiple"
+export const  multipeeventApi = `${eventsApi}/multiple`
 
 //Add single event Api
-export const addEvent = "https://eventscaduleserver.onrender.com/api/events"
 
 //Get user data and user events Api
-export const UserSData = "https://eventscaduleserver.onrender.com/api/auth"
+export const UserSData = `${authApi}`
 
 //Get Events Api
-export const GetEvents = "https://eventscaduleserver.onrender.com/api/events"
-
-
-//Update events Api
-export const UpdateEvent = "https://eventscaduleserver.onrender.com/api/events/:id"
-
-//Delete Events Api
-export const DeleteEvent = "https://eventscaduleserver.onrender.com/api/events/:id"
+export const userEventsApi = `${eventsApi}`
 
 

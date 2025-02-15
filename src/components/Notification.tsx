@@ -6,6 +6,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { setNotifiCard } from '../features/users';
 import { deleteEvent, deleteSelected, setNewCalenderEvent, setSelectEvent, updateEvents } from '../features/events';
 import axios from 'axios';
+import { userEventsApi } from '../api/api';
 
 const Notification:React.FC = () => {
     const notification = useSelector((state:RootState)=>state.users.notification);
@@ -24,7 +25,7 @@ const Notification:React.FC = () => {
     }
 
 const handleDelete = (id:string) => {
-  axios.delete(`http://localhost:8000/api/events/${id}`)
+  axios.delete(`${userEventsApi}/${id}`)
   .then(() => {
     dispatch(deleteEvent(id))
     dispatch(deleteSelected(id))

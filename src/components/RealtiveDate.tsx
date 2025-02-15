@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { Event } from '../types/types'
 import { eachDayOfInterval, endOfMonth, startOfMonth, format } from 'date-fns';
 import axios from 'axios';
-import { addEvent } from '../api/api';
 import { createEvent, setNewEvent } from '../features/events';
 import { useDispatch } from 'react-redux';
 import { toZonedTime } from 'date-fns-tz';
+import { userEventsApi } from '../api/api';
 
 const RealtiveDate = () => {
 
@@ -109,7 +109,7 @@ const RealtiveDate = () => {
                 description: events.description
             };
 
-            axios.post(addEvent, event)
+            axios.post(userEventsApi, event)
                 .then((res) => {
                     dispatch(setNewEvent(false));
                     dispatch(createEvent(res.data.event));

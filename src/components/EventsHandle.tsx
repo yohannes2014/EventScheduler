@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUpdateEvent, updateEvents, updateSelected } from '../features/events';
 import { Event, RootState } from '../types/types';
 import axios from 'axios';
+import { userEventsApi } from '../api/api';
 
 const EventsHandle: React.FC = () => {
   const selected = useSelector((state: RootState) => state.events.selectEvent);
@@ -116,7 +117,7 @@ else{
       description: input.description
     }
     dispatch(setUpdateEvent(updatedEvent));
-    axios.put(`http://localhost:8000/api/events/${updatedEvent._id}`, updatedEvent)
+    axios.put(`${userEventsApi}/${updatedEvent._id}`, updatedEvent)
       .then(() => {
 
         dispatch(updateEvents(false));

@@ -1,10 +1,10 @@
 import React from 'react';
 import { createEvent, setNewEvent } from '../features/events';
 import axios from 'axios';
-import { addEvent } from '../api/api';
 import { Event } from '../types/types';
 import { useSingle, useSingleError, useEvent } from '../hooks/useEvents';
 import { useDispatch } from 'react-redux';
+import { userEventsApi } from '../api/api';
 
 
 const SingleEvent: React.FC = () => {
@@ -103,7 +103,7 @@ const SingleEvent: React.FC = () => {
     // Add the new event to the events list
     setEvents((prevEvents) => [...prevEvents, newEvent]);
 
-    axios.post(addEvent, newEvent)
+    axios.post(userEventsApi, newEvent)
       .then(res => {
         dispatch(createEvent(res.data.event));
         // Reset form after successful submission

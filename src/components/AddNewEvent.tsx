@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Event } from '../types/types';
 import { createEvent, setNewCalenderEvent, setNewEvent } from '../features/events';
 import axios from 'axios';
-import { addEvent } from '../api/api';
+import {  userEventsApi } from '../api/api';
 import { RootState } from '../types/types';
 
 
@@ -106,7 +106,7 @@ const AddNewEvent: React.FC = () => {
         description: input.description
       }
 
-      axios.post(addEvent, newEvent)
+      axios.post(userEventsApi, newEvent)
         .then(res => {
           dispatch(createEvent(res.data.event));
           // Reset form after successful submission

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, UserEvent } from '../types/types';
 import axios from 'axios';
 import { deleteEvent, updateEvents, setSelectEvent, setNewEvent } from '../features/events';
+import { userEventsApi } from '../api/api';
 
 
 const ListEvent: React.FC = () => {
@@ -16,7 +17,7 @@ const ListEvent: React.FC = () => {
 
   const handleDelete = (e: string) => {
 
-    axios.delete(`https://eventscaduleserver.onrender.com/api/events/${e}`)
+    axios.delete(`${userEventsApi}/${e}`)
       .then(() => {
         dispatch(deleteEvent(e))
       })

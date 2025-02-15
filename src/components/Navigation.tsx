@@ -2,8 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate} from 'react-router-dom';
 import { RootState } from '../types/types';
-import { setUserForm, setUserLogin } from '../features/users';/* 
-import axios from 'axios'; */
+import { setUserForm, setUserLogin } from '../features/users';
 import axios from 'axios';
 import { logOutApi } from '../api/api';
 const Navigation:React.FC = () => {

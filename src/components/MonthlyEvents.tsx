@@ -5,6 +5,7 @@ import axios from "axios";
 import { addMultipleEvent, setNewEvent } from "../features/events";
 import { useDispatch } from "react-redux";
 import { useSingle } from "../hooks/useEvents";
+import { multipeeventApi } from "../api/api";
 
 const MonthlyEvents = () => {
   const [range, setRange] = useState<number>(0);
@@ -155,7 +156,7 @@ else{
 
        
           axios
-          .post("https://eventscaduleserver.onrender.com/api/events/multiple", newEvent)
+          .post(multipeeventApi, newEvent)
           .then(res => {
               dispatch(addMultipleEvent(res.data));
               dispatch(setNewEvent(false))

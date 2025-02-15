@@ -4,6 +4,7 @@ import axios from "axios";
 import { addMultipleEvent, setNewEvent } from "../features/events";
 import { useDispatch } from "react-redux";
 import { useSingle } from "../hooks/useEvents";
+import { multipeeventApi } from "../api/api";
 
 const WeeklyEvents = () => {
   const [range, setRange] = useState<number>(0);
@@ -167,7 +168,7 @@ else{
          
 
           axios
-          .post("http://localhost:8000/api/events/multiple", newEvent)
+          .post(multipeeventApi, newEvent)
           .then(res => {
               dispatch(addMultipleEvent(res.data));
                dispatch(setNewEvent(false))
