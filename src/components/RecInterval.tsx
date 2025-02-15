@@ -3,18 +3,23 @@ import { Event } from '../types/types';
 import axios from 'axios';
 import { addMultipleEvent, setNewEvent } from '../features/events';
 import { useDispatch } from 'react-redux';
-import { useSingle } from '../hooks/useEvents';
 import { multipeeventApi } from '../api/api';
 
 const RecInterval = () => {
   const dispatch = useDispatch();
 
-  const { single, setSingle } = useSingle();
+ 
   const [repeat, setRepeat] = useState<number>(0);
   const [repeatType, setRepeatType] = useState<string>('days');
-  const [startingDay, setStartingDay] = useState<string>('');
-  const [ending, setEnding] = useState<string>('');
   const [error, setError] = useState({
+    title: '',
+    time: '',
+    repeat: '',
+    starting: '',
+    ending: '',
+    description: ''
+  });
+  const [single, setSingle] = useState({
     title: '',
     time: '',
     repeat: '',
@@ -59,10 +64,28 @@ const RecInterval = () => {
 
 
 
-  const handleEnding = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEnding(e.target.value);
+  const handleStarting = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const {name, value} = e.target;
+ 
+  setSingle((pre)=>({...pre, [name]:value}))
 
-    if (ending === '') {
+    if (value === '') {
+      setError((prev) => ({ ...prev, starting: "Please insert initial day" }));
+    }
+
+    else {
+      setError((prev) => ({ ...prev, starting: "" }));
+    }
+  }
+
+
+
+  const handleEnding = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const {name, value} = e.target;
+ 
+  setSingle((pre)=>({...pre, [name]:value}))
+
+    if (value === '') {
       setError((prev) => ({ ...prev, ending: "Please insert last day" }));
     }
 
@@ -86,8 +109,8 @@ const RecInterval = () => {
     e.preventDefault();
 
     const newEvent: Event[] = [];
-    const start = new Date(startingDay);
-    const end = new Date(ending);
+    const start = new Date(single.starting);
+    const end = new Date(single.ending);
 
     const repeatEvery = repeat;
     const repeatWeekly = repeatEvery * 7
@@ -95,7 +118,7 @@ const RecInterval = () => {
 
 
     // Validation
-    if (single.title === "" && single.time === ""  && single.description === '' && single.date === '' && startingDay === "" && ending === "") {
+    if (single.title === "" && single.time === ""  && single.description === ''  && single.starting === "" && single.ending === "") {
       setError((prev) => ({ ...prev, title: 'Please insert title' }));
       setError((prev) => ({ ...prev, time: 'Please insert time' }));
       setError((prev) => ({ ...prev, description: 'Please insert description' }));
@@ -125,13 +148,13 @@ const RecInterval = () => {
 
       return;
   }
-  else if (startingDay === "") {
+  else if (single.starting === "") {
 
       setError((prev) => ({ ...prev, starting: 'Please insert starting day' }));
 
       return;
   }
-  else if (ending === "") {
+  else if (single.ending === "") {
 
       setError((prev) => ({ ...prev, ending: 'Please insert ending day' }));
 
@@ -179,14 +202,9 @@ else{
     axios
       .post(multipeeventApi, newEvent)
       .then(res => {
-        dispatch(addMultipleEvent(res.data))
-        dispatch(setNewEvent(false))
-        setSingle({
-          title: '',
-          time: '',
-          date: '',
-          description: ''
-        })
+        dispatch(addMultipleEvent(res.data));
+       dispatch(setNewEvent(false));
+       
       })
       .catch(err => console.log(err))
   }
@@ -238,7 +256,7 @@ else{
                   <label>Starting Date : </label>
                   <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.starting}</p>
                 </div>
-                <input value={startingDay} name='startingDay' onChange={(e)=>setStartingDay(e.target.value)} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
+                <input value={single.starting} name='starting' onChange={handleStarting} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
               </td>
             </tr>
             <tr>
@@ -248,7 +266,7 @@ else{
                   <label>Ending Date : </label>
                   <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.ending}</p>
                 </div>
-                <input value={ending} name='ending' onChange={handleEnding} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
+                <input value={single.ending} name='ending' onChange={handleEnding} className='border-solid border-sky-200 border-2 w-full mb-2 focus:outline-yellow-200 p-1' type='date' />
               </td>
             </tr>
 
