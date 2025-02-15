@@ -140,7 +140,7 @@ else{
          
 
           axios
-          .post("http://localhost:8000/api/events/multiple", newEvent)
+          .post("https://eventscaduleserver.onrender.com/api/events/multiple", newEvent)
           .then(res => {
               dispatch(addMultipleEvent(res.data))
                dispatch(setNewEvent(false))

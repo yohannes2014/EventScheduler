@@ -16,7 +16,7 @@ const ListEvent: React.FC = () => {
 
   const handleDelete = (e: string) => {
 
-    axios.delete(`http://localhost:8000/api/events/${e}`)
+    axios.delete(`https://eventscaduleserver.onrender.com/api/events/${e}`)
       .then(() => {
         dispatch(deleteEvent(e))
       })
