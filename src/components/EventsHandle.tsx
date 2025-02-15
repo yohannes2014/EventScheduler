@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUpdateEvent, updateEvents, updateSelected } from '../features/events';
+import { loadingEvents, setUpdateEvent, updateEvents, updateSelected } from '../features/events';
 import { Event, RootState } from '../types/types';
 import axios from 'axios';
 import { userEventsApi } from '../api/api';
 
 const EventsHandle: React.FC = () => {
   const selected = useSelector((state: RootState) => state.events.selectEvent);
+  const loading = useSelector((state:RootState)=>state.events.loading)
   const dispatch = useDispatch();
   const [input, setInput] = useState<Event>({
     title: '',
@@ -77,11 +78,6 @@ const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 
 }
 
-
-
-
-
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 if(input.time==="" && input.date === "" && input.description==="" && input.title === ""){
@@ -109,6 +105,7 @@ else if(input.description===""){
   return
 }
 else{
+  dispatch(loadingEvents(false));
     const updatedEvent = {
       _id: selected?._id,
       title: input.title,
@@ -121,7 +118,8 @@ else{
       .then(() => {
 
         dispatch(updateEvents(false));
-        dispatch(updateSelected(updatedEvent))
+        dispatch(updateSelected(updatedEvent));
+        dispatch(loadingEvents(false));
 
       })
     }
@@ -134,6 +132,7 @@ else{
 
 
   return (
+    
     <div className="lg:w-[600px] md:w-[450px] sm:w-[400px] 1xs:w-[350px] px-10 py-5 ">
       <p className='text-center font-bold text-blue-950'>Update Event</p>
       <form className="px-2 py-3 rounded-lg" onSubmit={handleSubmit}>
@@ -192,14 +191,10 @@ else{
             </tr>
             <tr>
               <td>
-
-
                 <div className='flex justify-between'>
                   <label>Description: </label>
                   <p className='mr-3 text-red-500 text-[14px] font-bold'>{error.description}</p>
                 </div>
-
-
                 <textarea
                   name="description"
                   placeholder="Description..."
@@ -211,9 +206,9 @@ else{
             </tr>
             <tr>
               <td className="flex gap-5">
-                <button className="bg-[#020742] text-white px-8 py-1 rounded-md" type="submit">
-                  Update
-                </button>
+              <button className='bg-[#020740] text-white px-8 py-1 cursor-pointer rounded-md hover:bg-[#020790]' type='submit'>
+                          {loading ? "Loading..." : "Update"}
+                        </button>
                 <p
                   className="bg-[#99a38b] text-white px-4 py-1 rounded-md cursor-pointer hover:bg-slate-400"
                   onClick={handleCancel}

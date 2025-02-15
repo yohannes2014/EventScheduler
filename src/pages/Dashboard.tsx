@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
         {notification && <Notification />}
 
            
-        {update && <div className='absolute z-10 bg-white shadow-lg shadow-blue-700 rounded-lg'>
+        {update && <div className='fixed top-24 z-10 bg-white shadow-lg shadow-blue-700 rounded-lg'>
           <EventsHandle />
         </div>}
         {addNew && <div className='absolute z-10 bg-white shadow-lg shadow-blue-700 rounded-lg'>
