@@ -106,9 +106,10 @@ const  handleCancel = () =>{
   return (
     <form onSubmit={handleLogin} noValidate>
       <div className="mb-4">
-        <label htmlFor="email" className="block text-gray-600 text-sm font-medium mb-2">
-          Email
-        </label>
+      <div className='flex justify-between'>
+                      <label>Email: </label>
+                            <p className='mr-3 text-red-500 text-[14px]'>{errors.email}</p>
+                        </div>
         <input
           type="email"
           id="email"
@@ -118,13 +119,14 @@ const  handleCancel = () =>{
           value={login.email}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
-        <p className="text-red-600">{errors.email}</p>
+       
       </div>
 
       <div className="mb-4">
-        <label htmlFor="password" className="block text-gray-600 text-sm font-medium mb-2">
-          Password
-        </label>
+         <div className='flex justify-between'>
+                      <label>Title: </label>
+                      <p className='mr-3 text-red-500 text-[14px]'>{errors.password}</p>
+          </div>
         <input
           type="password"
           id="password"
@@ -134,7 +136,7 @@ const  handleCancel = () =>{
           value={login.password}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
-        <p className="text-red-600">{errors.password}</p>
+     
       </div>
 
     

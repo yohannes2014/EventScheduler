@@ -125,9 +125,10 @@ const  handleCancel = () =>{
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
-          Name
-        </label>
+      <div className='flex justify-between'>
+                      <label>Name </label>
+                      <p className='mr-3 text-red-500 text-[14px]'>{errors.username}</p>
+          </div>
         <input
           type="text"
           id="name"
@@ -136,12 +137,12 @@ const  handleCancel = () =>{
           onChange={handleName}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
-        <p className="text-red-600">{errors.username}</p>
       </div>
       <div className="mb-4">
-        <label htmlFor="email" className="block text-gray-600 text-sm font-medium mb-2">
-          Email
-        </label>
+      <div className='flex justify-between'>
+                      <label>Email: </label>
+                      <p className='mr-3 text-red-500 text-[14px]'>{errors.email}</p>
+          </div>
         <input
           type="email"
           id="email"
@@ -150,12 +151,12 @@ const  handleCancel = () =>{
           onChange={handleEmail}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
-        <p className="text-red-600">{errors.email}</p>
       </div>
       <div className="mb-4">
-        <label htmlFor="password" className="block text-gray-600 text-sm font-medium mb-2">
-          Password
-        </label>
+      <div className='flex justify-between'>
+                      <label>Password </label>
+                      <p className='mr-3 text-red-500 text-[14px]'>{errors.password}</p>
+          </div>
         <input
           type="password"
           id="password"
@@ -164,12 +165,12 @@ const  handleCancel = () =>{
           onChange={handlePassword}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
-        <p className="text-red-600">{errors.password}</p>
       </div>
       <div className="mb-4">
-        <label htmlFor="confirmPassword" className="block text-gray-600 text-sm font-medium mb-2">
-          Repeat Password
-        </label>
+      <div className='flex justify-between'>
+                      <label>Repeat </label>
+                      <p className='mr-3 text-red-500 text-[14px]'>{errors.confirmPassword}</p>
+          </div>
         <input
           type="password"
           id="confirmPassword"
@@ -178,7 +179,6 @@ const  handleCancel = () =>{
           onChange={handleConfirmPassword}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
-        <p className="text-red-600">{errors.confirmPassword}</p>
       </div>
       <div className="mb-4 flex gap-6">
         <button
